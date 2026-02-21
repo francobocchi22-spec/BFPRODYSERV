@@ -36,15 +36,16 @@
         @keyframes spin { to { transform:rotate(360deg); } }
 
         /* HEADER */
-        header { background:linear-gradient(to right,#070707,#151515); border-bottom:3px solid var(--orange); padding:1.4rem 0; position:sticky; top:0; z-index:1000; box-shadow:0 4px 30px rgba(255,102,0,.2); }
+        header { background:linear-gradient(to right,#070707,#151515); border-bottom:3px solid var(--orange); padding:.8rem 0 0; position:sticky; top:0; z-index:1000; box-shadow:0 4px 30px rgba(255,102,0,.2); }
         .container { max-width:1200px; margin:0 auto; padding:0 2rem; }
-        .header-top { display:flex; align-items:flex-start; justify-content:space-between; flex-wrap:wrap; gap:.5rem; }
-        h1 { font-family:'Oswald',sans-serif; color:var(--orange); font-size:2rem; text-transform:uppercase; letter-spacing:3px; line-height:1.1; }
-        .tagline { color:var(--muted); font-size:.88rem; font-style:italic; margin-top:3px; }
-        .header-badge { background:rgba(255,102,0,.1); border:1px solid rgba(255,102,0,.25); border-radius:4px; padding:.3rem .8rem; font-size:.78rem; color:var(--orange); font-family:'Oswald',sans-serif; letter-spacing:1px; text-transform:uppercase; white-space:nowrap; align-self:flex-start; }
-        nav { display:flex; justify-content:center; gap:1rem; margin-top:1.2rem; flex-wrap:wrap; }
-        nav a { color:#aaa; font-family:'Oswald',sans-serif; font-size:.95rem; font-weight:600; padding:.55rem 1.6rem; border:2px solid #333; border-radius:3px; transition:all .3s; text-transform:uppercase; letter-spacing:1px; }
-        nav a:hover, nav a.active { background:var(--orange); color:#fff; border-color:var(--orange); transform:translateY(-2px); box-shadow:0 4px 15px rgba(255,102,0,.4); text-decoration:none; }
+        .header-top { display:flex; align-items:flex-start; justify-content:space-between; flex-wrap:wrap; gap:.5rem; padding-bottom:.6rem; }
+        h1 { font-family:'Oswald',sans-serif; color:var(--orange); font-size:1.8rem; text-transform:uppercase; letter-spacing:3px; line-height:1.1; }
+        .tagline { color:var(--muted); font-size:.82rem; font-style:italic; margin-top:2px; }
+        .header-badge { background:rgba(255,102,0,.1); border:1px solid rgba(255,102,0,.25); border-radius:4px; padding:.25rem .7rem; font-size:.75rem; color:var(--orange); font-family:'Oswald',sans-serif; letter-spacing:1px; text-transform:uppercase; white-space:nowrap; align-self:flex-start; }
+        nav { display:flex; justify-content:center; gap:0; margin-top:0; flex-wrap:wrap; }
+        nav a { color:#aaa; font-family:'Oswald',sans-serif; font-size:.95rem; font-weight:600; padding:.55rem 1.6rem; border:none; border-right:1px solid #333; background:#1a1a1a; transition:all .3s; text-transform:uppercase; letter-spacing:1px; }
+        nav a:first-child { border-left:1px solid #333; }
+        nav a:hover, nav a.active { background:var(--orange); color:#fff; box-shadow:none; text-decoration:none; }
 
         /* HERO */
         .hero { position:relative; overflow:hidden; padding:6rem 0; text-align:center; background:linear-gradient(rgba(0,0,0,.78),rgba(0,0,0,.88)), repeating-linear-gradient(45deg,#1a1a1a 0,#1a1a1a 2px,#141414 2px,#141414 22px); }
@@ -198,7 +199,7 @@
             <span class="header-badge">Desde 1960</span>
         </div>
         <nav>
-            <li><a href="index.html">Inicio</a></li>
+            <a href="bf-index.html" class="active">Inicio</a>
             <a href="bf-productos.html">Galería</a>
             <a href="#contacto">Contacto</a>
         </nav>
@@ -281,7 +282,7 @@
                     <div class="info-icon">✉️</div>
                     <div class="info-body">
                         <h4>Email</h4>
-                        <p><a href="mailto:bfproductosyservicios@gmail.com">bfproductosyservicios@gmail.com</a><br>
+                        <p><a href="/cdn-cgi/l/email-protection#e785819795888392849388949e948295918e848e8894a7808a868e8bc984888a"><span class="__cf_email__" data-cfemail="d6b4b0a6a4b9b2a3b5a2b9a5afa5b3a4a0bfb5bfb9a596b1bbb7bfbaf8b5b9bb">[email&#160;protected]</span></a><br>
                         Respondemos dentro de las 24 hs</p>
                     </div>
                 </div>
@@ -296,7 +297,8 @@
                 </div>
                 <div>
                     <div class="map-wrap">
-                        <<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3399.575578948402!2d-68.70651395982902!3d-32.970158573693496!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x967e6d3c5d6eae33%3A0xbc9ffec021b1a968!2sBocchi%20Malanca%20Carrocerias!5e1!3m2!1ses-419!2sar!4v1771687107886!5m2!1ses-419!2sar" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3284.0168878546844!2d-58.38375908477047!3d-34.60373098045682!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzTCsDM2JzEzLjQiUyA1OMKwMjInNTQuMyJX!5e0!3m2!1ses!2sar!4v1234567890123!5m2!1ses!2sar"
+                            allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
                         </iframe>
                     </div>
                     <a href="https://share.google/cF3YX1ZZ8mhxVCasz" target="_blank" rel="noopener" class="map-link">📍 Abrir en Google Maps →</a>
@@ -370,7 +372,7 @@
             <div class="footer-col">
                 <h4>Navegación</h4>
                 <ul>
-                   <li><a href="index.html">Inicio</a></li>
+                    <li><a href="index.html">Inicio</a></li>
                     <li><a href="bf-productos.html">Galería de trabajos</a></li>
                     <li><a href="#novedades">Novedades</a></li>
                     <li><a href="#contacto">Contacto</a></li>
@@ -380,8 +382,8 @@
                 <h4>Contacto</h4>
                 <ul>
                     <li><a href="https://w.app/zwassv" target="_blank" rel="noopener">WhatsApp</a></li>
-                    <li><a href="mailto:bfproductosyservicios@gmail.com">Email</a></li>
-                    <li><a href="https://maps.app.goo.gl/BocchiMalancaCarrocerias" target="_blank" rel="noopener">Ver en Google Maps</a></li>
+                    <li><a href="/cdn-cgi/l/email-protection#accecadcdec3c8d9cfd8c3dfd5dfc9dedac5cfc5c3dfeccbc1cdc5c082cfc3c1">Email</a></li>
+                    <li><a href="https://share.google/cF3YX1ZZ8mhxVCasz" target="_blank" rel="noopener">Ver en Google Maps</a></li>
                 </ul>
             </div>
         </div>
@@ -402,22 +404,19 @@
 
 <div class="toast" id="toast"></div>
 
-<script>
-// ── NOVEDADES ──
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+// ── NOVEDADES desde JSONBin ──
 async function loadNovedades() {
     try {
-        const r = await window.storage.get('bf-novedades-index', true);
-        if (!r) return [];
-        const list = JSON.parse(r.value);
-        for (const n of list) {
-            if (n.img && n.img.startsWith('STORED:')) {
-                try {
-                    const d = await window.storage.get('bf-novedad-img-' + n.img.replace('STORED:',''), true);
-                    n.img = d ? d.value : null;
-                } catch(e) { n.img = null; }
-            }
-        }
-        return list;
+        const binId = localStorage.getItem('bf-jsonbin-bin');
+        const key   = localStorage.getItem('bf-jsonbin-key');
+        if (!binId || !key) return [];
+        const res = await fetch('https://api.jsonbin.io/v3/b/' + binId + '/latest', {
+            headers: { 'X-Master-Key': key }
+        });
+        if (!res.ok) return [];
+        const data = await res.json();
+        return data.record || [];
     } catch(e) { return []; }
 }
 
@@ -500,15 +499,4 @@ function secretClick() {
 // ── HELPERS ──
 function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
 let _tt;
-function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');clearTimeout(_tt);_tt=setTimeout(()=>t.classList.remove('show'),3200);}
-
-// ── INIT ──
-(async()=>{
-    const list = await loadNovedades();
-    renderNovedades(list);
-    document.getElementById('loading-overlay').style.opacity='0';
-    setTimeout(()=>document.getElementById('loading-overlay').style.display='none',400);
-})();
-</script>
-</body>
-</html>
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');clearTimeout(_tt);_tt=setTimeout(()=>t.c

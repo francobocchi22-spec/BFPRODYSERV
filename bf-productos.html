@@ -177,19 +177,30 @@
 </a>
 
 <script>
+const CLOUD_NAME = 'dtmgoqeuq';
 const CATS = ['carrocerias','estructuras','equipamiento','otros'];
 let photos = {carrocerias:[],estructuras:[],equipamiento:[],otros:[]};
 
-// ── Carga índices desde storage (las URLs son de Cloudinary) ──
+// ── Carga fotos directamente desde Cloudinary por carpeta ──
 async function loadAll() {
     for (const cat of CATS) {
         try {
-            const r = await window.storage.get('bf-cl-index-' + cat, true);
-            photos[cat] = r ? JSON.parse(r.value) : [];
+            const tag = 'bf_' + cat;
+            // Primero intentamos por tag, si falla usamos el índice de carpeta
+            const url = 'https://res.cloudinary.com/' + CLOUD_NAME + '/image/list/' + tag + '.json';
+            const res = await fetch(url);
+            if (res.ok) {
+                const data = await res.json();
+                photos[cat] = (data.resources || []).map(r => ({
+                    url: 'https://res.cloudinary.com/' + CLOUD_NAME + '/image/upload/q_auto,f_auto/' + r.public_id,
+                    name: r.public_id.split('/').pop().replace(/\.[^.]+$/, '')
+                }));
+            } else {
+                photos[cat] = [];
+            }
         } catch(e) { photos[cat] = []; }
     }
 }
-
 // ── Render ──
 function renderAll() {
     CATS.forEach(cat => {

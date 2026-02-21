@@ -20,44 +20,21 @@
         }
         body{font-family:'Open Sans',sans-serif;background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh}
 
-        /* ── LOGIN SCREEN ── */
-        #login-screen{
-            position:fixed;inset:0;background:var(--bg);z-index:9999;
-            display:flex;align-items:center;justify-content:center;
-        }
-        .login-box{
-            background:var(--card);border:1px solid var(--border);border-radius:12px;
-            padding:3rem 2.5rem;width:100%;max-width:380px;text-align:center;
-            box-shadow:0 20px 60px rgba(0,0,0,.6);
-        }
+        /* LOGIN */
+        #login-screen{position:fixed;inset:0;background:var(--bg);z-index:9999;display:flex;align-items:center;justify-content:center;}
+        .login-box{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:3rem 2.5rem;width:100%;max-width:380px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.6);}
         .login-logo{font-family:'Oswald',sans-serif;font-size:1.6rem;color:var(--orange);text-transform:uppercase;letter-spacing:3px;margin-bottom:.3rem}
         .login-sub{color:var(--muted);font-size:.9rem;margin-bottom:2rem}
         .login-icon{font-size:3rem;margin-bottom:1.5rem;display:block}
-        .login-input{
-            width:100%;background:#151515;border:1px solid #333;border-radius:6px;
-            color:#fff;font-size:1rem;padding:.85rem 1rem;outline:none;
-            font-family:'Open Sans',sans-serif;transition:border-color .2s;
-            text-align:center;letter-spacing:4px;
-        }
+        .login-input{width:100%;background:#151515;border:1px solid #333;border-radius:6px;color:#fff;font-size:1rem;padding:.85rem 1rem;outline:none;font-family:'Open Sans',sans-serif;transition:border-color .2s;text-align:center;letter-spacing:4px;}
         .login-input:focus{border-color:var(--orange)}
-        .login-btn{
-            width:100%;margin-top:1rem;background:var(--orange);color:#fff;
-            border:none;border-radius:6px;padding:.9rem;font-family:'Oswald',sans-serif;
-            font-size:1.1rem;text-transform:uppercase;letter-spacing:2px;cursor:pointer;
-            transition:all .2s;
-        }
+        .login-btn{width:100%;margin-top:1rem;background:var(--orange);color:#fff;border:none;border-radius:6px;padding:.9rem;font-family:'Oswald',sans-serif;font-size:1.1rem;text-transform:uppercase;letter-spacing:2px;cursor:pointer;transition:all .2s;}
         .login-btn:hover{background:#e55a00}
         .login-error{color:var(--red);font-size:.85rem;margin-top:.8rem;display:none}
-        .login-attempts{color:var(--muted);font-size:.78rem;margin-top:.5rem}
 
-        /* ── ADMIN LAYOUT ── */
+        /* ADMIN LAYOUT */
         #admin-panel{display:none}
-        .admin-header{
-            background:linear-gradient(to right,#080808,#161616);
-            border-bottom:3px solid var(--orange);
-            padding:1.2rem 0;position:sticky;top:0;z-index:100;
-            box-shadow:0 4px 24px rgba(255,102,0,.2);
-        }
+        .admin-header{background:linear-gradient(to right,#080808,#161616);border-bottom:3px solid var(--orange);padding:1.2rem 0;position:sticky;top:0;z-index:100;box-shadow:0 4px 24px rgba(255,102,0,.2);}
         .admin-header-inner{max-width:1100px;margin:0 auto;padding:0 2rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem}
         .admin-title{font-family:'Oswald',sans-serif;color:var(--orange);font-size:1.4rem;text-transform:uppercase;letter-spacing:2px}
         .admin-title span{color:#fff;font-size:.85rem;display:block;letter-spacing:1px;font-weight:400;margin-top:1px}
@@ -81,7 +58,7 @@
         .tab-panel{display:none}
         .tab-panel.active{display:block}
 
-        /* SECTION CARDS */
+        /* CARDS */
         .panel-card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:1.8rem;margin-bottom:1.5rem}
         .panel-card h3{font-family:'Oswald',sans-serif;color:var(--orange);font-size:1.1rem;text-transform:uppercase;letter-spacing:1px;margin-bottom:1.2rem;display:flex;align-items:center;gap:.5rem}
 
@@ -90,38 +67,32 @@
         .form-row.full{grid-template-columns:1fr}
         .form-group{display:flex;flex-direction:column;gap:.4rem}
         label{font-size:.85rem;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
-        input[type=text],input[type=date],textarea,select{
-            background:#151515;border:1px solid #333;border-radius:5px;
-            color:#fff;font-size:.95rem;padding:.7rem .9rem;
-            outline:none;font-family:'Open Sans',sans-serif;transition:border-color .2s;width:100%;
-        }
+        input[type=text],input[type=date],textarea,select,input[type=password]{background:#151515;border:1px solid #333;border-radius:5px;color:#fff;font-size:.95rem;padding:.7rem .9rem;outline:none;font-family:'Open Sans',sans-serif;transition:border-color .2s;width:100%;}
         input:focus,textarea:focus,select:focus{border-color:var(--orange)}
         textarea{resize:vertical;min-height:120px}
         .char-count{font-size:.75rem;color:var(--muted);text-align:right;margin-top:.2rem}
 
-        /* IMAGE UPLOAD */
-        .img-upload-area{
-            border:2px dashed #333;border-radius:6px;padding:1.5rem;text-align:center;
-            cursor:pointer;transition:all .2s;
-        }
-        .img-upload-area:hover{border-color:var(--orange);background:rgba(255,102,0,.04)}
-        .img-upload-area input{display:none}
-        .img-preview{max-width:100%;max-height:200px;border-radius:6px;margin-top:1rem;display:none}
-        .img-preview.show{display:block;margin:1rem auto 0}
+        /* UPLOAD AREA */
+        .upload-area{border:2px dashed #333;border-radius:6px;padding:2rem;text-align:center;cursor:pointer;transition:all .2s;position:relative;}
+        .upload-area:hover{border-color:var(--orange);background:rgba(255,102,0,.04)}
+        .upload-area input{display:none}
+        .upload-area-text{color:var(--muted);font-size:.9rem}
+        .upload-area-text span{display:block;font-size:2rem;margin-bottom:.5rem}
+        .upload-progress{display:none;margin-top:1rem;}
+        .progress-bar{height:6px;background:#333;border-radius:3px;overflow:hidden;margin-top:.5rem;}
+        .progress-fill{height:100%;background:var(--orange);width:0%;transition:width .3s;border-radius:3px;}
+        .img-preview-wrap{margin-top:1rem;display:none;}
+        .img-preview-wrap img{max-height:180px;border-radius:6px;margin:0 auto;}
+        .img-preview-wrap .remove-img{font-size:.75rem;color:var(--red);cursor:pointer;margin-top:.4rem;display:block;text-align:center;}
 
-        /* NOVEDADES LIST */
-        .novedad-row{
-            display:flex;align-items:center;gap:1rem;padding:1rem;
-            background:var(--card2);border:1px solid var(--border);border-radius:6px;margin-bottom:.7rem;
-            transition:border-color .2s;
-        }
+        /* NOVEDAD LIST */
+        .novedad-row{display:flex;align-items:center;gap:1rem;padding:1rem;background:var(--card2);border:1px solid var(--border);border-radius:6px;margin-bottom:.7rem;transition:border-color .2s;}
         .novedad-row:hover{border-color:#444}
-        .novedad-row-thumb{width:72px;height:48px;object-fit:cover;border-radius:4px;flex-shrink:0;background:#222;display:flex;align-items:center;justify-content:center;font-size:1.4rem;color:#444}
-        .novedad-row-thumb img{width:100%;height:100%;object-fit:cover;border-radius:4px}
+        .novedad-thumb{width:72px;height:48px;border-radius:4px;flex-shrink:0;background:#222;display:flex;align-items:center;justify-content:center;font-size:1.4rem;color:#444;overflow:hidden;}
+        .novedad-thumb img{width:100%;height:100%;object-fit:cover;}
         .novedad-row-info{flex:1;min-width:0}
         .novedad-row-title{font-weight:600;color:#ddd;font-size:.95rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
         .novedad-row-date{font-size:.78rem;color:var(--orange)}
-        .novedad-row-actions{display:flex;gap:.5rem;flex-shrink:0}
         .btn-sm{padding:.3rem .7rem;font-size:.78rem;border-radius:3px;cursor:pointer;border:1px solid #444;background:none;color:var(--muted);transition:all .2s;font-family:'Open Sans',sans-serif}
         .btn-sm:hover{border-color:var(--orange);color:var(--orange)}
         .btn-sm.del:hover{border-color:var(--red);color:var(--red)}
@@ -131,31 +102,38 @@
         .cat-pill{padding:.5rem 1.2rem;border-radius:20px;border:1px solid var(--border);background:none;color:var(--muted);cursor:pointer;font-family:'Oswald',sans-serif;font-size:.9rem;text-transform:uppercase;letter-spacing:1px;transition:all .2s}
         .cat-pill:hover,.cat-pill.active{background:var(--orange);color:#fff;border-color:var(--orange)}
         .photo-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1rem}
-        .photo-admin-card{background:var(--card2);border:1px solid var(--border);border-radius:6px;overflow:hidden;transition:all .2s}
+        .photo-admin-card{background:var(--card2);border:1px solid var(--border);border-radius:6px;overflow:hidden;transition:all .2s;}
         .photo-admin-card:hover{border-color:#555}
         .photo-admin-card img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block}
         .photo-admin-caption{padding:.6rem .8rem;display:flex;align-items:center;justify-content:space-between;gap:.4rem}
         .photo-admin-name{font-size:.83rem;color:#ccc;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
         .rename-inline{background:#1a1a1a;border:1px solid var(--orange);border-radius:3px;color:#fff;font-size:.83rem;padding:.18rem .4rem;width:100%;outline:none}
-
-        .add-photo-tile{border:2px dashed #333;border-radius:6px;aspect-ratio:4/3;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:all .2s}
+        .add-photo-tile{border:2px dashed #333;border-radius:6px;aspect-ratio:4/3;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:all .2s;}
         .add-photo-tile:hover{border-color:var(--orange);background:rgba(255,102,0,.04)}
         .add-photo-tile input{display:none}
         .add-photo-tile span{font-size:2rem;color:#444}
         .add-photo-tile p{font-size:.75rem;color:#555;margin-top:.3rem;text-transform:uppercase;letter-spacing:1px}
+        .uploading-indicator{position:absolute;inset:0;background:rgba(0,0,0,.7);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.5rem;border-radius:6px;}
+        .uploading-indicator p{font-size:.8rem;color:#ccc}
+        .spinner-sm{width:28px;height:28px;border:3px solid #333;border-top-color:var(--orange);border-radius:50%;animation:spin .7s linear infinite;}
+        @keyframes spin{to{transform:rotate(360deg)}}
+
+        /* INFO BOX */
+        .info-box{background:rgba(255,102,0,.07);border:1px solid rgba(255,102,0,.2);border-radius:6px;padding:1rem 1.2rem;font-size:.88rem;color:var(--muted);margin-bottom:1.5rem;display:flex;gap:.8rem;align-items:flex-start;}
+        .info-box span{font-size:1.2rem;flex-shrink:0;}
 
         /* TOAST */
         .toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(20px);background:#222;color:#ddd;border-left:3px solid var(--orange);padding:.8rem 1.6rem;border-radius:6px;font-size:.9rem;opacity:0;transition:all .3s;pointer-events:none;white-space:nowrap;z-index:9000}
         .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
-        /* CHANGE PASSWORD */
+        /* PW */
         .pw-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
         @media(max-width:600px){.form-row{grid-template-columns:1fr}.pw-grid{grid-template-columns:1fr}.admin-tabs{overflow-x:auto}.admin-tab{white-space:nowrap;font-size:.85rem;padding:.7rem 1.2rem}}
     </style>
 </head>
 <body>
 
-<!-- ── LOGIN ── -->
+<!-- LOGIN -->
 <div id="login-screen">
     <div class="login-box">
         <span class="login-icon">🔐</span>
@@ -165,27 +143,22 @@
                onkeydown="if(event.key==='Enter')tryLogin()">
         <button class="login-btn" onclick="tryLogin()">Ingresar</button>
         <div class="login-error" id="login-error">Contraseña incorrecta</div>
-        <div class="login-attempts" id="login-attempts"></div>
     </div>
 </div>
 
-<!-- ── ADMIN PANEL ── -->
+<!-- ADMIN PANEL -->
 <div id="admin-panel">
 
     <div class="admin-header">
         <div class="admin-header-inner">
-            <div class="admin-title">
-                ⚙ BF Admin
-                <span>Panel de administración</span>
-            </div>
+            <div class="admin-title">⚙ BF Admin <span>Panel de administración</span></div>
             <div class="header-actions">
-                <a href="bf-index.html" target="_blank" class="btn btn-ghost">🌐 Ver sitio</a>
+                <a href="index.html" target="_blank" class="btn btn-ghost">🌐 Ver sitio</a>
                 <button class="btn btn-red" onclick="logout()">🚪 Salir</button>
             </div>
         </div>
     </div>
 
-    <!-- TABS -->
     <div class="admin-tabs">
         <button class="admin-tab active" onclick="switchTab('novedades',this)">📰 Novedades</button>
         <button class="admin-tab" onclick="switchTab('galeria',this)">🖼️ Galería</button>
@@ -194,26 +167,24 @@
 
     <div class="admin-content">
 
-        <!-- ══ TAB: NOVEDADES ══ -->
+        <!-- TAB NOVEDADES -->
         <div class="tab-panel active" id="tab-novedades">
-
-            <!-- Nueva novedad -->
             <div class="panel-card">
                 <h3>➕ Nueva novedad</h3>
                 <div class="form-row">
                     <div class="form-group">
-                        <label>Título</label>
+                        <label>Título *</label>
                         <input type="text" id="n-title" placeholder="Ej: Nuevo trailer entregado" maxlength="100" oninput="updateChar(this,'n-title-count')">
                         <div class="char-count"><span id="n-title-count">0</span>/100</div>
                     </div>
                     <div class="form-group">
-                        <label>Fecha</label>
+                        <label>Fecha *</label>
                         <input type="date" id="n-date">
                     </div>
                 </div>
                 <div class="form-row full">
                     <div class="form-group">
-                        <label>Texto / descripción</label>
+                        <label>Texto / descripción *</label>
                         <textarea id="n-text" placeholder="Contá los detalles del trabajo, novedad o proyecto..." maxlength="2000" oninput="updateChar(this,'n-text-count')"></textarea>
                         <div class="char-count"><span id="n-text-count">0</span>/2000</div>
                     </div>
@@ -221,40 +192,47 @@
                 <div class="form-row full">
                     <div class="form-group">
                         <label>Imagen (opcional)</label>
-                        <label class="img-upload-area" id="n-img-area">
-                            <input type="file" accept="image/*" id="n-img-input" onchange="previewImg(this)">
-                            <div id="n-img-placeholder">📷 Hacé clic para agregar una imagen</div>
-                            <img id="n-img-preview" class="img-preview" src="" alt="">
+                        <label class="upload-area" id="n-upload-area">
+                            <input type="file" accept="image/*" id="n-img-input" onchange="handleNovedadImg(this)">
+                            <div class="upload-area-text" id="n-upload-text">
+                                <span>📷</span>
+                                Hacé clic para seleccionar una imagen
+                            </div>
+                            <div class="img-preview-wrap" id="n-preview-wrap">
+                                <img id="n-img-preview" src="" alt="">
+                                <span class="remove-img" onclick="removeNovedadImg(event)">✕ Quitar imagen</span>
+                            </div>
                         </label>
                     </div>
                 </div>
-                <button class="btn btn-orange" onclick="saveNovedad()" style="margin-top:.5rem">✅ Publicar novedad</button>
+                <button class="btn btn-orange" onclick="saveNovedad()" style="margin-top:.5rem" id="n-save-btn">✅ Publicar novedad</button>
             </div>
 
-            <!-- Lista de novedades -->
             <div class="panel-card">
                 <h3>📋 Novedades publicadas</h3>
                 <div id="novedades-list"><p style="color:var(--muted);font-size:.9rem">Cargando...</p></div>
             </div>
         </div>
 
-        <!-- ══ TAB: GALERÍA ══ -->
+        <!-- TAB GALERÍA -->
         <div class="tab-panel" id="tab-galeria">
             <div class="panel-card">
                 <h3>🖼️ Gestión de fotos</h3>
-                <div class="cat-select-row" id="cat-pills">
+                <div class="info-box">
+                    <span>☁️</span>
+                    <span>Las fotos se suben a <strong>Cloudinary</strong> y quedan guardadas en la nube permanentemente. Son visibles para todos los visitantes del sitio.</span>
+                </div>
+                <div class="cat-select-row">
                     <button class="cat-pill active" onclick="selectCat('carrocerias',this)">🚛 Carrocerías</button>
                     <button class="cat-pill" onclick="selectCat('estructuras',this)">🏗️ Estructuras</button>
                     <button class="cat-pill" onclick="selectCat('equipamiento',this)">⚡ Equipamiento</button>
                     <button class="cat-pill" onclick="selectCat('otros',this)">🔩 Otros</button>
                 </div>
-                <div class="photo-grid" id="admin-photo-grid">
-                    <!-- rendered -->
-                </div>
+                <div class="photo-grid" id="admin-photo-grid"></div>
             </div>
         </div>
 
-        <!-- ══ TAB: CONFIG ══ -->
+        <!-- TAB CONFIG -->
         <div class="tab-panel" id="tab-config">
             <div class="panel-card">
                 <h3>🔒 Cambiar contraseña</h3>
@@ -273,49 +251,56 @@
             <div class="panel-card">
                 <h3>🌐 Links rápidos</h3>
                 <div style="display:flex;gap:1rem;flex-wrap:wrap">
-                    <a href="bf-index.html" target="_blank" class="btn btn-ghost">Ver Novedades</a>
+                    <a href="index.html" target="_blank" class="btn btn-ghost">Ver Inicio</a>
                     <a href="bf-productos.html" target="_blank" class="btn btn-ghost">Ver Galería</a>
-                    <a href="bf-servicios.html" target="_blank" class="btn btn-ghost">Ver Servicios</a>
                 </div>
             </div>
         </div>
 
-    </div><!-- /admin-content -->
-</div><!-- /admin-panel -->
+    </div>
+</div>
 
 <div class="toast" id="toast"></div>
 
 <script>
 // ══════════════════════════════════════════
-//  PASSWORD  (hash SHA-256)
+//  CLOUDINARY CONFIG
 // ══════════════════════════════════════════
-const DEFAULT_PW = 'bf2026';  // ← CAMBIÁ ESTO en la pestaña Configuración
+const CLOUD_NAME   = 'dtmgoqeuq';
+const UPLOAD_PRESET = 'ml_default';
+const CLOUDINARY_URL = 'https://api.cloudinary.com/v1_1/' + CLOUD_NAME + '/image/upload';
+
+async function uploadToCloudinary(file, folder) {
+    const fd = new FormData();
+    fd.append('file', file);
+    fd.append('upload_preset', UPLOAD_PRESET);
+    fd.append('folder', 'bf/' + folder);
+    const res = await fetch(CLOUDINARY_URL, { method: 'POST', body: fd });
+    if (!res.ok) throw new Error('Error subiendo imagen');
+    const data = await res.json();
+    return data.secure_url; // URL permanente de la imagen
+}
+
+// ══════════════════════════════════════════
+//  PASSWORD
+// ══════════════════════════════════════════
+const DEFAULT_PW = 'bf2026';
 
 async function hashPw(pw) {
     const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(pw));
     return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
 }
 
-async function getStoredHash() {
-    try {
-        const r = await window.storage.get('bf-admin-pwhash', false);
-        return r ? r.value : null;
-    } catch(e) { return null; }
-}
-
 async function tryLogin() {
     const pw = document.getElementById('pw-input').value;
     if (!pw) return;
-
-    let storedHash = await getStoredHash();
-    // First time: save default password hash
+    let storedHash;
+    try { const r = await window.storage.get('bf-admin-pwhash', false); storedHash = r ? r.value : null; } catch(e) { storedHash = null; }
     if (!storedHash) {
         storedHash = await hashPw(DEFAULT_PW);
         await window.storage.set('bf-admin-pwhash', storedHash, false);
     }
-
-    const inputHash = await hashPw(pw);
-    if (inputHash === storedHash) {
+    if (await hashPw(pw) === storedHash) {
         document.getElementById('login-screen').style.display = 'none';
         document.getElementById('admin-panel').style.display = 'block';
         await initAdmin();
@@ -330,13 +315,12 @@ async function tryLogin() {
 async function changePassword() {
     const p1 = document.getElementById('new-pw1').value;
     const p2 = document.getElementById('new-pw2').value;
-    if (!p1 || p1.length < 6) { showToast('⚠️ La contraseña debe tener al menos 6 caracteres'); return; }
+    if (!p1 || p1.length < 6) { showToast('⚠️ Mínimo 6 caracteres'); return; }
     if (p1 !== p2) { showToast('⚠️ Las contraseñas no coinciden'); return; }
-    const hash = await hashPw(p1);
-    await window.storage.set('bf-admin-pwhash', hash, false);
+    await window.storage.set('bf-admin-pwhash', await hashPw(p1), false);
     document.getElementById('new-pw1').value = '';
     document.getElementById('new-pw2').value = '';
-    showToast('✅ Contraseña actualizada correctamente');
+    showToast('✅ Contraseña actualizada');
 }
 
 function logout() {
@@ -359,7 +343,8 @@ function switchTab(name, btn) {
 //  NOVEDADES
 // ══════════════════════════════════════════
 let novedades = [];
-let nImgData = null;
+let nImgFile = null;
+let nImgPreviewUrl = null;
 
 async function loadNovedades() {
     try {
@@ -372,42 +357,27 @@ async function saveNovedadesIndex() {
     await window.storage.set('bf-novedades-index', JSON.stringify(novedades), true);
 }
 
-function renderNovedasList() {
-    const el = document.getElementById('novedades-list');
-    if (!novedades.length) { el.innerHTML = '<p style="color:var(--muted);font-size:.9rem">No hay novedades publicadas todavía.</p>'; return; }
-    const sorted = [...novedades].sort((a,b) => b.date.localeCompare(a.date));
-    el.innerHTML = '';
-    sorted.forEach(n => {
-        const row = document.createElement('div');
-        row.className = 'novedad-row';
-        row.innerHTML =
-            '<div class="novedad-row-thumb">' +
-                (n.img ? '<img src="' + n.img + '">' : '📰') +
-            '</div>' +
-            '<div class="novedad-row-info">' +
-                '<div class="novedad-row-title">' + escHtml(n.title) + '</div>' +
-                '<div class="novedad-row-date">' + formatDate(n.date) + '</div>' +
-            '</div>' +
-            '<div class="novedad-row-actions">' +
-                '<button class="btn-sm del" onclick="deleteNovedad(\'' + n.id + '\')">🗑️ Borrar</button>' +
-            '</div>';
-        el.appendChild(row);
-    });
-}
-
-function previewImg(input) {
+function handleNovedadImg(input) {
     const file = input.files[0];
     if (!file) return;
+    nImgFile = file;
     const reader = new FileReader();
     reader.onload = e => {
-        nImgData = e.target.result;
-        const prev = document.getElementById('n-img-preview');
-        const ph = document.getElementById('n-img-placeholder');
-        prev.src = nImgData;
-        prev.classList.add('show');
-        ph.style.display = 'none';
+        nImgPreviewUrl = e.target.result;
+        document.getElementById('n-upload-text').style.display = 'none';
+        const wrap = document.getElementById('n-preview-wrap');
+        document.getElementById('n-img-preview').src = nImgPreviewUrl;
+        wrap.style.display = 'block';
     };
     reader.readAsDataURL(file);
+}
+
+function removeNovedadImg(e) {
+    e.preventDefault();
+    nImgFile = null; nImgPreviewUrl = null;
+    document.getElementById('n-img-input').value = '';
+    document.getElementById('n-preview-wrap').style.display = 'none';
+    document.getElementById('n-upload-text').style.display = '';
 }
 
 async function saveNovedad() {
@@ -418,36 +388,64 @@ async function saveNovedad() {
     if (!date)  { showToast('⚠️ La fecha es obligatoria'); return; }
     if (!text)  { showToast('⚠️ El texto es obligatorio'); return; }
 
-    const id = 'n' + Date.now();
-    const novedad = { id, title, date, text, img: nImgData || null };
+    const btn = document.getElementById('n-save-btn');
+    btn.disabled = true;
+    btn.textContent = '⏳ Publicando...';
 
-    // Save image separately if exists
-    if (nImgData) {
-        await window.storage.set('bf-novedad-img-' + id, nImgData, true);
-        novedad.img = 'STORED:' + id; // reference
+    let imgUrl = null;
+    if (nImgFile) {
+        try {
+            showToast('☁️ Subiendo imagen...');
+            imgUrl = await uploadToCloudinary(nImgFile, 'novedades');
+        } catch(e) {
+            showToast('⚠️ Error al subir imagen. Verificá tu conexión.');
+            btn.disabled = false;
+            btn.textContent = '✅ Publicar novedad';
+            return;
+        }
     }
 
-    novedades.push(novedad);
+    const id = 'n' + Date.now();
+    novedades.push({ id, title, date, text, img: imgUrl });
     await saveNovedadesIndex();
 
     // Reset form
     document.getElementById('n-title').value = '';
-    document.getElementById('n-date').value = '';
+    document.getElementById('n-date').value = new Date().toISOString().slice(0,10);
     document.getElementById('n-text').value = '';
-    document.getElementById('n-img-preview').classList.remove('show');
-    document.getElementById('n-img-placeholder').style.display = '';
-    document.getElementById('n-img-input').value = '';
-    nImgData = null;
+    removeNovedadImg({ preventDefault:()=>{} });
     updateChar(document.getElementById('n-title'), 'n-title-count');
     updateChar(document.getElementById('n-text'), 'n-text-count');
+    nImgFile = null;
 
+    btn.disabled = false;
+    btn.textContent = '✅ Publicar novedad';
     renderNovedasList();
     showToast('✅ Novedad publicada correctamente');
 }
 
+function renderNovedasList() {
+    const el = document.getElementById('novedades-list');
+    if (!novedades.length) { el.innerHTML = '<p style="color:var(--muted);font-size:.9rem">No hay novedades publicadas todavía.</p>'; return; }
+    el.innerHTML = '';
+    [...novedades].sort((a,b) => b.date.localeCompare(a.date)).forEach(n => {
+        const row = document.createElement('div');
+        row.className = 'novedad-row';
+        row.innerHTML =
+            '<div class="novedad-thumb">' + (n.img ? '<img src="'+n.img+'">' : '📰') + '</div>' +
+            '<div class="novedad-row-info">' +
+                '<div class="novedad-row-title">'+escHtml(n.title)+'</div>' +
+                '<div class="novedad-row-date">'+formatDate(n.date)+'</div>' +
+            '</div>' +
+            '<div style="display:flex;gap:.5rem;flex-shrink:0">' +
+                '<button class="btn-sm del" onclick="deleteNovedad(\''+n.id+'\')">🗑️ Borrar</button>' +
+            '</div>';
+        el.appendChild(row);
+    });
+}
+
 async function deleteNovedad(id) {
     if (!confirm('¿Eliminar esta novedad?')) return;
-    try { await window.storage.delete('bf-novedad-img-' + id, true); } catch(e){}
     novedades = novedades.filter(n => n.id !== id);
     await saveNovedadesIndex();
     renderNovedasList();
@@ -455,7 +453,7 @@ async function deleteNovedad(id) {
 }
 
 // ══════════════════════════════════════════
-//  GALLERY
+//  GALERÍA — Cloudinary
 // ══════════════════════════════════════════
 const CATS = ['carrocerias','estructuras','equipamiento','otros'];
 let photos = { carrocerias:[], estructuras:[], equipamiento:[], otros:[] };
@@ -464,26 +462,14 @@ let activeCat = 'carrocerias';
 async function loadPhotos() {
     for (const cat of CATS) {
         try {
-            const r = await window.storage.get('bf-index-' + cat, true);
-            if (!r) continue;
-            const index = JSON.parse(r.value);
-            photos[cat] = [];
-            for (const item of index) {
-                try {
-                    const d = await window.storage.get('bf-photo-' + item.id, true);
-                    if (d) photos[cat].push({ id: item.id, name: item.name, data: d.value });
-                } catch(e){}
-            }
-        } catch(e){}
+            const r = await window.storage.get('bf-cl-index-' + cat, true);
+            photos[cat] = r ? JSON.parse(r.value) : [];
+        } catch(e) { photos[cat] = []; }
     }
 }
 
-async function savePhotoCat(cat) {
-    const index = photos[cat].map(p => ({ id:p.id, name:p.name }));
-    await window.storage.set('bf-index-' + cat, JSON.stringify(index), true);
-    for (const p of photos[cat]) {
-        await window.storage.set('bf-photo-' + p.id, p.data, true);
-    }
+async function savePhotoIndex(cat) {
+    await window.storage.set('bf-cl-index-' + cat, JSON.stringify(photos[cat]), true);
 }
 
 function selectCat(cat, btn) {
@@ -496,46 +482,60 @@ function selectCat(cat, btn) {
 function renderPhotoGrid() {
     const grid = document.getElementById('admin-photo-grid');
     grid.innerHTML = '';
+
     for (const p of photos[activeCat]) {
         const card = document.createElement('div');
         card.className = 'photo-admin-card';
         card.dataset.id = p.id;
+        card.style.position = 'relative';
         card.innerHTML =
-            '<img src="' + p.data + '" alt="' + escHtml(p.name) + '">' +
+            '<img src="'+p.url+'" alt="'+escHtml(p.name)+'">' +
             '<div class="photo-admin-caption">' +
-                '<span class="photo-admin-name" id="aname-' + p.id + '">' + escHtml(p.name) + '</span>' +
+                '<span class="photo-admin-name" id="aname-'+p.id+'">'+escHtml(p.name)+'</span>' +
                 '<div style="display:flex;gap:.3rem;flex-shrink:0">' +
-                    '<button class="btn-sm" onclick="startRename(\'' + p.id + '\')">✏️</button>' +
-                    '<button class="btn-sm del" onclick="deletePhoto(\'' + p.id + '\',\'' + activeCat + '\')">🗑️</button>' +
+                    '<button class="btn-sm" onclick="startRename(\''+p.id+'\')">✏️</button>' +
+                    '<button class="btn-sm del" onclick="deletePhoto(\''+p.id+'\',\''+activeCat+'\')">🗑️</button>' +
                 '</div>' +
             '</div>';
         grid.appendChild(card);
     }
+
     // Add tile
     const addTile = document.createElement('label');
     addTile.className = 'add-photo-tile';
-    addTile.innerHTML = '<input type="file" accept="image/*" multiple onchange="addPhotos(this,\'' + activeCat + '\')"><span>＋</span><p>Agregar foto</p>';
+    addTile.style.position = 'relative';
+    addTile.innerHTML =
+        '<input type="file" accept="image/*" multiple onchange="addPhotos(this,\''+activeCat+'\')">' +
+        '<span>＋</span><p>Agregar foto</p>';
     grid.appendChild(addTile);
 }
 
-function addPhotos(input, cat) {
+async function addPhotos(input, cat) {
     const files = Array.from(input.files);
-    let done = 0;
-    files.forEach(file => {
-        const reader = new FileReader();
-        reader.onload = async e => {
-            const id = 'p' + Date.now() + Math.random().toString(36).slice(2,6);
-            photos[cat].push({ id, name: file.name.replace(/\.[^.]+$/,''), data: e.target.result });
-            await savePhotoCat(cat);
-            done++;
-            if (done === files.length) {
-                renderPhotoGrid();
-                showToast('✅ ' + done + ' foto(s) guardada(s)');
-            }
-        };
-        reader.readAsDataURL(file);
-    });
+    if (!files.length) return;
     input.value = '';
+
+    // Show uploading state on the tile
+    const tile = input.parentElement;
+    tile.innerHTML = '<div class="uploading-indicator"><div class="spinner-sm"></div><p>Subiendo '+files.length+' foto(s)...</p></div>';
+
+    let uploaded = 0;
+    for (const file of files) {
+        try {
+            const url = await uploadToCloudinary(file, cat);
+            const id = 'p' + Date.now() + Math.random().toString(36).slice(2,5);
+            const name = file.name.replace(/\.[^.]+$/, '');
+            photos[cat].push({ id, name, url });
+            await savePhotoIndex(cat);
+            uploaded++;
+            showToast('☁️ ' + uploaded + '/' + files.length + ' foto(s) subida(s)...');
+        } catch(e) {
+            showToast('⚠️ Error subiendo "' + file.name + '"');
+        }
+    }
+
+    renderPhotoGrid();
+    showToast('✅ ' + uploaded + ' foto(s) guardada(s) en Cloudinary');
 }
 
 function startRename(id) {
@@ -547,43 +547,35 @@ function startRename(id) {
     const finish = async () => {
         const val = inp.value.trim() || prev;
         const p = photos[activeCat].find(x => x.id === id);
-        if (p) {
-            p.name = val;
-            await savePhotoCat(activeCat);
-        }
+        if (p) { p.name = val; await savePhotoIndex(activeCat); }
         renderPhotoGrid();
         showToast('✅ Renombrada a "' + val + '"');
     };
-    inp.onkeydown = e => { if(e.key==='Enter') finish(); if(e.key==='Escape'){renderPhotoGrid();} };
+    inp.onkeydown = e => { if(e.key==='Enter') finish(); if(e.key==='Escape') renderPhotoGrid(); };
     inp.onblur = finish;
     el.replaceWith(inp);
     inp.focus(); inp.select();
 }
 
 async function deletePhoto(id, cat) {
-    if (!confirm('¿Eliminar esta foto?')) return;
-    try { await window.storage.delete('bf-photo-' + id, true); } catch(e){}
+    if (!confirm('¿Eliminar esta foto de la galería?')) return;
     photos[cat] = photos[cat].filter(p => p.id !== id);
-    await savePhotoCat(cat);
+    await savePhotoIndex(cat);
     renderPhotoGrid();
-    showToast('🗑️ Foto eliminada');
+    showToast('🗑️ Foto eliminada de la galería');
 }
 
 // ══════════════════════════════════════════
 //  HELPERS
 // ══════════════════════════════════════════
-function updateChar(el, countId) {
-    document.getElementById(countId).textContent = el.value.length;
-}
+function updateChar(el, countId) { document.getElementById(countId).textContent = el.value.length; }
 function escHtml(s) { return String(s).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
-function formatDate(iso) {
-    return new Date(iso).toLocaleDateString('es-AR', {day:'2-digit',month:'long',year:'numeric'});
-}
+function formatDate(iso) { return new Date(iso).toLocaleDateString('es-AR',{day:'2-digit',month:'long',year:'numeric'}); }
 let _tt;
 function showToast(msg) {
     const t = document.getElementById('toast');
     t.textContent = msg; t.classList.add('show');
-    clearTimeout(_tt); _tt = setTimeout(() => t.classList.remove('show'), 3500);
+    clearTimeout(_tt); _tt = setTimeout(()=>t.classList.remove('show'), 3500);
 }
 
 // ══════════════════════════════════════════
@@ -593,9 +585,9 @@ async function initAdmin() {
     await Promise.all([loadNovedades(), loadPhotos()]);
     renderNovedasList();
     renderPhotoGrid();
-    // Default date = today
     document.getElementById('n-date').value = new Date().toISOString().slice(0,10);
 }
 </script>
 </body>
 </html>
+

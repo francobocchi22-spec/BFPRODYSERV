@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BF Productos - Galería de Trabajos</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Open+Sans:wght@300;400;600&display=swap');
+        *{margin:0;padding:0;box-sizing:border-box}
+        :root{
+            --orange:#ff6600;
+            --bg:#111;
+            --card:#1e1e1e;
+            --card2:#252525;
+            --border:#2e2e2e;
+            --text:#d0d0d0;
+            --muted:#888;
+        }
+        body{font-family:'Open Sans',sans-serif;background:var(--bg);color:var(--text);line-height:1.6}
+
+        /* HEADER */
+        header{background:linear-gradient(to right,#080808,#161616);border-bottom:3px solid var(--orange);padding:1.6rem 0;position:sticky;top:0;z-index:1000;box-shadow:0 4px 24px rgba(255,102,0,.25)}
+        .container{max-width:1200px;margin:0 auto;padding:0 2rem}
+        h1{font-family:'Oswald',sans-serif;color:var(--orange);font-size:2.2rem;text-transform:uppercase;letter-spacing:3px}
+        .tagline{color:var(--muted);font-size:.95rem;font-style:italic;margin-top:2px}
+        nav{display:flex;justify-content:center;gap:1.5rem;margin-top:1.2rem;flex-wrap:wrap}
+        nav a{color:#aaa;text-decoration:none;font-family:'Oswald',sans-serif;font-size:1rem;font-weight:600;padding:.6rem 1.8rem;border:2px solid #333;border-radius:3px;transition:all .3s;text-transform:uppercase;letter-spacing:1px}
+        nav a:hover,nav a.active{background:var(--orange);color:#fff;border-color:var(--orange);transform:translateY(-2px);box-shadow:0 4px 15px rgba(255,102,0,.45)}
+
+        /* PAGE HERO */
+        .page-hero{background:linear-gradient(rgba(0,0,0,.75),rgba(0,0,0,.85)),repeating-linear-gradient(45deg,#1a1a1a 0,#1a1a1a 2px,#141414 2px,#141414 20px);padding:3.5rem 0 2.5rem;text-align:center;border-bottom:1px solid var(--border)}
+        .page-hero h2{font-family:'Oswald',sans-serif;font-size:2.6rem;color:#fff;text-transform:uppercase;letter-spacing:4px}
+        .page-hero h2 span{color:var(--orange)}
+        .page-hero p{color:var(--muted);font-size:1.05rem;margin-top:.6rem}
+
+        /* CATEGORY TABS */
+        .cat-tabs{display:flex;justify-content:center;gap:0;margin:2.5rem auto 0;max-width:700px;border:2px solid var(--border);border-radius:6px;overflow:hidden}
+        .cat-tab{flex:1;padding:.8rem 1rem;background:var(--card);color:var(--muted);font-family:'Oswald',sans-serif;font-size:1rem;text-transform:uppercase;letter-spacing:1px;cursor:pointer;border:none;border-right:1px solid var(--border);transition:all .25s}
+        .cat-tab:last-child{border-right:none}
+        .cat-tab:hover{background:#2a2a2a;color:#ddd}
+        .cat-tab.active{background:var(--orange);color:#fff;font-weight:700}
+
+        /* GALLERY */
+        .gallery-section{padding:3rem 0;display:none}
+        .gallery-section.visible{display:block}
+        .section-title{font-family:'Oswald',sans-serif;font-size:1.8rem;color:var(--orange);text-transform:uppercase;letter-spacing:2px;margin-bottom:.4rem;display:flex;align-items:center;gap:.6rem}
+        .section-title::after{content:'';flex:1;height:2px;background:linear-gradient(to right,var(--orange),transparent);margin-left:1rem}
+        .section-desc{color:var(--muted);font-size:.95rem;margin-bottom:2rem}
+        .photo-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1.2rem}
+        .photo-card{background:var(--card2);border:1px solid var(--border);border-radius:6px;overflow:hidden;position:relative;transition:all .3s;cursor:pointer}
+        .photo-card:hover{border-color:var(--orange);transform:translateY(-4px);box-shadow:0 8px 28px rgba(255,102,0,.3)}
+        .photo-thumb{width:100%;aspect-ratio:4/3;object-fit:cover;display:block}
+        .photo-overlay{position:absolute;top:0;left:0;right:0;aspect-ratio:4/3;display:flex;align-items:center;justify-content:center;background:rgba(255,102,0,.12);opacity:0;transition:opacity .3s}
+        .photo-card:hover .photo-overlay{opacity:1}
+        .photo-overlay span{background:var(--orange);color:#fff;font-family:'Oswald',sans-serif;font-size:.9rem;padding:.4rem 1rem;border-radius:3px;text-transform:uppercase;letter-spacing:1px}
+        .photo-caption{padding:.7rem 1rem;border-top:1px solid var(--border)}
+        .photo-name{font-size:.9rem;color:#ccc;font-weight:600}
+
+        .empty-state{grid-column:1/-1;text-align:center;padding:3rem 1rem;color:var(--muted)}
+        .empty-state span{display:block;font-size:2.5rem;margin-bottom:.5rem;opacity:.3}
+
+        /* LOADING */
+        #loading-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9998;gap:1rem}
+        #loading-overlay p{color:#ccc}
+        .spinner{width:42px;height:42px;border:4px solid #333;border-top-color:var(--orange);border-radius:50%;animation:spin .7s linear infinite}
+        @keyframes spin{to{transform:rotate(360deg)}}
+
+        /* LIGHTBOX */
+        .lightbox{display:none;position:fixed;inset:0;background:rgba(0,0,0,.93);z-index:9999;align-items:center;justify-content:center;padding:2rem}
+        .lightbox.open{display:flex}
+        .lightbox-inner{position:relative;max-width:900px;width:100%}
+        .lightbox img{width:100%;border-radius:6px;border:2px solid var(--orange);max-height:85vh;object-fit:contain}
+        .lightbox-close{position:absolute;top:-1rem;right:-1rem;background:var(--orange);color:#fff;border:none;border-radius:50%;width:2.2rem;height:2.2rem;font-size:1.1rem;cursor:pointer;display:flex;align-items:center;justify-content:center}
+
+        /* FOOTER */
+        footer{background:#090909;border-top:2px solid var(--border);padding:2rem 0;text-align:center;color:#555;font-size:.9rem;position:relative}
+        /* Secret admin trigger — invisible text in footer */
+        .secret-trigger{cursor:default;user-select:none;color:transparent;font-size:.1px;position:absolute;bottom:1rem;right:1.5rem;padding:1rem}
+
+        .whatsapp-float{position:fixed;bottom:2rem;right:2rem;background:#25d366;border-radius:50%;width:3.5rem;height:3.5rem;display:flex;align-items:center;justify-content:center;text-decoration:none;box-shadow:0 4px 20px rgba(37,211,102,.4);transition:transform .3s;z-index:500}
+        .whatsapp-float:hover{transform:scale(1.1)}
+
+        @media(max-width:768px){
+            h1{font-size:1.6rem}
+            .page-hero h2{font-size:1.8rem}
+            .cat-tabs{flex-direction:column;max-width:300px}
+            .cat-tab{border-right:none;border-bottom:1px solid var(--border)}
+            .cat-tab:last-child{border-bottom:none}
+            .photo-grid{grid-template-columns:repeat(auto-fill,minmax(200px,1fr))}
+        }
+    </style>
+</head>
+<body>
+
+<div id="loading-overlay"><div class="spinner"></div><p>Cargando galería...</p></div>
+
+<header>
+    <div class="container">
+        <h1>⚙ BF PRODUCTOS Y SERVICIOS</h1>
+        <p class="tagline">Taller Metalúrgico — Soluciones profesionales en metal y soldadura</p>
+        <nav>
+            <a href="bf-index.html">Novedades</a>
+            <a href="bf-productos.html" class="active">Productos</a>
+            <a href="bf-servicios.html#contacto">Contacto</a>
+        </nav>
+    </div>
+</header>
+
+<div class="page-hero">
+    <div class="container">
+        <h2>Galería de <span>Trabajos</span></h2>
+        <p>Conocé nuestros proyectos realizados — calidad y experiencia en cada obra</p>
+        <div class="cat-tabs">
+            <button class="cat-tab active" onclick="showCat('carrocerias',this)">🚛 Carrocerías</button>
+            <button class="cat-tab" onclick="showCat('estructuras',this)">🏗️ Estructuras</button>
+            <button class="cat-tab" onclick="showCat('equipamiento',this)">⚡ Equipamiento</button>
+            <button class="cat-tab" onclick="showCat('otros',this)">🔩 Otros</button>
+        </div>
+    </div>
+</div>
+
+<main>
+<div class="container">
+    <section id="carrocerias" class="gallery-section visible">
+        <div class="section-title">🚛 Carrocerías</div>
+        <p class="section-desc">Fabricación y reparación de carrocerías personalizadas, trailers y trabajos de línea pesada.</p>
+        <div class="photo-grid" id="grid-carrocerias"><div class="empty-state"><span>📷</span>Próximamente fotos de nuestros trabajos</div></div>
+    </section>
+    <section id="estructuras" class="gallery-section">
+        <div class="section-title">🏗️ Estructuras</div>
+        <p class="section-desc">Estructuras metálicas, portones, rejas, escaleras y trabajos de construcción en metal.</p>
+        <div class="photo-grid" id="grid-estructuras"><div class="empty-state"><span>📷</span>Próximamente fotos de nuestros trabajos</div></div>
+    </section>
+    <section id="equipamiento" class="gallery-section">
+        <div class="section-title">⚡ Equipamiento</div>
+        <p class="section-desc">Equipamiento para unidades 4x4, minería y maquinaria industrial a medida.</p>
+        <div class="photo-grid" id="grid-equipamiento"><div class="empty-state"><span>📷</span>Próximamente fotos de nuestros trabajos</div></div>
+    </section>
+    <section id="otros" class="gallery-section">
+        <div class="section-title">🔩 Otros</div>
+        <p class="section-desc">Trabajos especiales, reparaciones, mantenimiento industrial y proyectos varios.</p>
+        <div class="photo-grid" id="grid-otros"><div class="empty-state"><span>📷</span>Próximamente fotos de nuestros trabajos</div></div>
+    </section>
+</div>
+</main>
+
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+    <div class="lightbox-inner" onclick="event.stopPropagation()">
+        <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+        <img id="lightbox-img" src="" alt="">
+    </div>
+</div>
+
+<footer>
+    <div class="container">
+        <p>&copy; 2026 BF Productos y Servicios — Taller Metalúrgico. Todos los derechos reservados.</p>
+    </div>
+    <!-- Secret admin link: invisible, only you know it's here -->
+    <span class="secret-trigger" onclick="secretClick()" title="">·</span>
+</footer>
+
+<a href="https://w.app/zwassv" class="whatsapp-float" target="_blank"><span style="font-size:1.8rem">💬</span></a>
+
+<script>
+const CATS = ['carrocerias','estructuras','equipamiento','otros'];
+let photos = {carrocerias:[],estructuras:[],equipamiento:[],otros:[]};
+
+// ── STORAGE ──
+async function loadAll() {
+    for (const cat of CATS) {
+        try {
+            const r = await window.storage.get('bf-index-' + cat, true);
+            if (!r) continue;
+            const index = JSON.parse(r.value);
+            photos[cat] = [];
+            for (const item of index) {
+                try {
+                    const d = await window.storage.get('bf-photo-' + item.id, true);
+                    if (d) photos[cat].push({id:item.id, name:item.name, data:d.value});
+                } catch(e){}
+            }
+        } catch(e){}
+    }
+}
+
+// ── RENDER ──
+function renderAll() {
+    CATS.forEach(cat => {
+        const grid = document.getElementById('grid-' + cat);
+        const empty = grid.querySelector('.empty-state');
+        [...grid.querySelectorAll('.photo-card')].forEach(c => c.remove());
+        photos[cat].forEach(p => {
+            const card = document.createElement('div');
+            card.className = 'photo-card';
+            card.onclick = () => openLightbox(p.data);
+            card.innerHTML =
+                '<img class="photo-thumb" src="' + p.data + '" alt="' + escHtml(p.name) + '">' +
+                '<div class="photo-overlay"><span>Ver foto</span></div>' +
+                '<div class="photo-caption"><span class="photo-name">' + escHtml(p.name) + '</span></div>';
+            grid.insertBefore(card, empty);
+        });
+        if (empty) empty.style.display = photos[cat].length ? 'none' : '';
+    });
+}
+
+function showCat(cat, btn) {
+    document.querySelectorAll('.gallery-section').forEach(s => s.classList.remove('visible'));
+    document.querySelectorAll('.cat-tab').forEach(t => t.classList.remove('active'));
+    document.getElementById(cat).classList.add('visible');
+    btn.classList.add('active');
+    window.scrollTo({top: document.querySelector('.page-hero').offsetTop - 70, behavior:'smooth'});
+}
+
+function openLightbox(src) { document.getElementById('lightbox-img').src = src; document.getElementById('lightbox').classList.add('open'); }
+function closeLightbox() { document.getElementById('lightbox').classList.remove('open'); }
+document.addEventListener('keydown', e => { if(e.key==='Escape') closeLightbox(); });
+
+function escHtml(s) { return String(s).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+// ── SECRET ADMIN TRIGGER ──
+// Triple-click on the invisible dot in the footer → goes to admin panel
+let clickCount = 0, clickTimer;
+function secretClick() {
+    clickCount++;
+    clearTimeout(clickTimer);
+    clickTimer = setTimeout(() => { clickCount = 0; }, 800);
+    if (clickCount >= 3) {
+        clickCount = 0;
+        window.location.href = 'bf-admin.html';
+    }
+}
+
+// ── INIT ──
+(async () => {
+    await loadAll();
+    renderAll();
+    document.getElementById('loading-overlay').style.display = 'none';
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BF Admin — Panel de administración</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Open+Sans:wght@300;400;600&display=swap');
+        *{margin:0;padding:0;box-sizing:border-box}
+        :root{
+            --orange:#ff6600;
+            --bg:#111;
+            --card:#1e1e1e;
+            --card2:#252525;
+            --border:#2e2e2e;
+            --text:#d0d0d0;
+            --muted:#888;
+            --green:#22c55e;
+            --red:#ef4444;
+        }
+        body{font-family:'Open Sans',sans-serif;background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh}
+
+        /* ── LOGIN SCREEN ── */
+        #login-screen{
+            position:fixed;inset:0;background:var(--bg);z-index:9999;
+            display:flex;align-items:center;justify-content:center;
+        }
+        .login-box{
+            background:var(--card);border:1px solid var(--border);border-radius:12px;
+            padding:3rem 2.5rem;width:100%;max-width:380px;text-align:center;
+            box-shadow:0 20px 60px rgba(0,0,0,.6);
+        }
+        .login-logo{font-family:'Oswald',sans-serif;font-size:1.6rem;color:var(--orange);text-transform:uppercase;letter-spacing:3px;margin-bottom:.3rem}
+        .login-sub{color:var(--muted);font-size:.9rem;margin-bottom:2rem}
+        .login-icon{font-size:3rem;margin-bottom:1.5rem;display:block}
+        .login-input{
+            width:100%;background:#151515;border:1px solid #333;border-radius:6px;
+            color:#fff;font-size:1rem;padding:.85rem 1rem;outline:none;
+            font-family:'Open Sans',sans-serif;transition:border-color .2s;
+            text-align:center;letter-spacing:4px;
+        }
+        .login-input:focus{border-color:var(--orange)}
+        .login-btn{
+            width:100%;margin-top:1rem;background:var(--orange);color:#fff;
+            border:none;border-radius:6px;padding:.9rem;font-family:'Oswald',sans-serif;
+            font-size:1.1rem;text-transform:uppercase;letter-spacing:2px;cursor:pointer;
+            transition:all .2s;
+        }
+        .login-btn:hover{background:#e55a00}
+        .login-error{color:var(--red);font-size:.85rem;margin-top:.8rem;display:none}
+        .login-attempts{color:var(--muted);font-size:.78rem;margin-top:.5rem}
+
+        /* ── ADMIN LAYOUT ── */
+        #admin-panel{display:none}
+        .admin-header{
+            background:linear-gradient(to right,#080808,#161616);
+            border-bottom:3px solid var(--orange);
+            padding:1.2rem 0;position:sticky;top:0;z-index:100;
+            box-shadow:0 4px 24px rgba(255,102,0,.2);
+        }
+        .admin-header-inner{max-width:1100px;margin:0 auto;padding:0 2rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem}
+        .admin-title{font-family:'Oswald',sans-serif;color:var(--orange);font-size:1.4rem;text-transform:uppercase;letter-spacing:2px}
+        .admin-title span{color:#fff;font-size:.85rem;display:block;letter-spacing:1px;font-weight:400;margin-top:1px}
+        .header-actions{display:flex;gap:.8rem;align-items:center;flex-wrap:wrap}
+        .btn{padding:.5rem 1.2rem;border-radius:4px;cursor:pointer;font-family:'Oswald',sans-serif;font-size:.9rem;text-transform:uppercase;letter-spacing:1px;transition:all .2s;border:none;text-decoration:none;display:inline-flex;align-items:center;gap:.4rem}
+        .btn-orange{background:var(--orange);color:#fff}
+        .btn-orange:hover{background:#e55a00}
+        .btn-ghost{background:none;border:1px solid #444;color:var(--muted)}
+        .btn-ghost:hover{border-color:var(--orange);color:var(--orange)}
+        .btn-red{background:none;border:1px solid #553;color:#a88}
+        .btn-red:hover{border-color:var(--red);color:var(--red)}
+
+        /* TABS */
+        .admin-tabs{max-width:1100px;margin:2rem auto 0;padding:0 2rem;display:flex;gap:0;border-bottom:2px solid var(--border)}
+        .admin-tab{padding:.8rem 1.8rem;cursor:pointer;font-family:'Oswald',sans-serif;font-size:1rem;text-transform:uppercase;letter-spacing:1px;color:var(--muted);border-bottom:3px solid transparent;margin-bottom:-2px;transition:all .2s;background:none;border-left:none;border-right:none;border-top:none}
+        .admin-tab:hover{color:#ddd}
+        .admin-tab.active{color:var(--orange);border-bottom-color:var(--orange)}
+
+        /* CONTENT */
+        .admin-content{max-width:1100px;margin:0 auto;padding:2rem}
+        .tab-panel{display:none}
+        .tab-panel.active{display:block}
+
+        /* SECTION CARDS */
+        .panel-card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:1.8rem;margin-bottom:1.5rem}
+        .panel-card h3{font-family:'Oswald',sans-serif;color:var(--orange);font-size:1.1rem;text-transform:uppercase;letter-spacing:1px;margin-bottom:1.2rem;display:flex;align-items:center;gap:.5rem}
+
+        /* FORMS */
+        .form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem}
+        .form-row.full{grid-template-columns:1fr}
+        .form-group{display:flex;flex-direction:column;gap:.4rem}
+        label{font-size:.85rem;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+        input[type=text],input[type=date],textarea,select{
+            background:#151515;border:1px solid #333;border-radius:5px;
+            color:#fff;font-size:.95rem;padding:.7rem .9rem;
+            outline:none;font-family:'Open Sans',sans-serif;transition:border-color .2s;width:100%;
+        }
+        input:focus,textarea:focus,select:focus{border-color:var(--orange)}
+        textarea{resize:vertical;min-height:120px}
+        .char-count{font-size:.75rem;color:var(--muted);text-align:right;margin-top:.2rem}
+
+        /* IMAGE UPLOAD */
+        .img-upload-area{
+            border:2px dashed #333;border-radius:6px;padding:1.5rem;text-align:center;
+            cursor:pointer;transition:all .2s;
+        }
+        .img-upload-area:hover{border-color:var(--orange);background:rgba(255,102,0,.04)}
+        .img-upload-area input{display:none}
+        .img-preview{max-width:100%;max-height:200px;border-radius:6px;margin-top:1rem;display:none}
+        .img-preview.show{display:block;margin:1rem auto 0}
+
+        /* NOVEDADES LIST */
+        .novedad-row{
+            display:flex;align-items:center;gap:1rem;padding:1rem;
+            background:var(--card2);border:1px solid var(--border);border-radius:6px;margin-bottom:.7rem;
+            transition:border-color .2s;
+        }
+        .novedad-row:hover{border-color:#444}
+        .novedad-row-thumb{width:72px;height:48px;object-fit:cover;border-radius:4px;flex-shrink:0;background:#222;display:flex;align-items:center;justify-content:center;font-size:1.4rem;color:#444}
+        .novedad-row-thumb img{width:100%;height:100%;object-fit:cover;border-radius:4px}
+        .novedad-row-info{flex:1;min-width:0}
+        .novedad-row-title{font-weight:600;color:#ddd;font-size:.95rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+        .novedad-row-date{font-size:.78rem;color:var(--orange)}
+        .novedad-row-actions{display:flex;gap:.5rem;flex-shrink:0}
+        .btn-sm{padding:.3rem .7rem;font-size:.78rem;border-radius:3px;cursor:pointer;border:1px solid #444;background:none;color:var(--muted);transition:all .2s;font-family:'Open Sans',sans-serif}
+        .btn-sm:hover{border-color:var(--orange);color:var(--orange)}
+        .btn-sm.del:hover{border-color:var(--red);color:var(--red)}
+
+        /* GALLERY */
+        .cat-select-row{display:flex;gap:.8rem;margin-bottom:1.5rem;flex-wrap:wrap}
+        .cat-pill{padding:.5rem 1.2rem;border-radius:20px;border:1px solid var(--border);background:none;color:var(--muted);cursor:pointer;font-family:'Oswald',sans-serif;font-size:.9rem;text-transform:uppercase;letter-spacing:1px;transition:all .2s}
+        .cat-pill:hover,.cat-pill.active{background:var(--orange);color:#fff;border-color:var(--orange)}
+        .photo-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1rem}
+        .photo-admin-card{background:var(--card2);border:1px solid var(--border);border-radius:6px;overflow:hidden;transition:all .2s}
+        .photo-admin-card:hover{border-color:#555}
+        .photo-admin-card img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block}
+        .photo-admin-caption{padding:.6rem .8rem;display:flex;align-items:center;justify-content:space-between;gap:.4rem}
+        .photo-admin-name{font-size:.83rem;color:#ccc;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+        .rename-inline{background:#1a1a1a;border:1px solid var(--orange);border-radius:3px;color:#fff;font-size:.83rem;padding:.18rem .4rem;width:100%;outline:none}
+
+        .add-photo-tile{border:2px dashed #333;border-radius:6px;aspect-ratio:4/3;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:all .2s}
+        .add-photo-tile:hover{border-color:var(--orange);background:rgba(255,102,0,.04)}
+        .add-photo-tile input{display:none}
+        .add-photo-tile span{font-size:2rem;color:#444}
+        .add-photo-tile p{font-size:.75rem;color:#555;margin-top:.3rem;text-transform:uppercase;letter-spacing:1px}
+
+        /* TOAST */
+        .toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(20px);background:#222;color:#ddd;border-left:3px solid var(--orange);padding:.8rem 1.6rem;border-radius:6px;font-size:.9rem;opacity:0;transition:all .3s;pointer-events:none;white-space:nowrap;z-index:9000}
+        .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+        /* CHANGE PASSWORD */
+        .pw-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+        @media(max-width:600px){.form-row{grid-template-columns:1fr}.pw-grid{grid-template-columns:1fr}.admin-tabs{overflow-x:auto}.admin-tab{white-space:nowrap;font-size:.85rem;padding:.7rem 1.2rem}}
+    </style>
+</head>
+<body>
+
+<!-- ── LOGIN ── -->
+<div id="login-screen">
+    <div class="login-box">
+        <span class="login-icon">🔐</span>
+        <div class="login-logo">BF Admin</div>
+        <div class="login-sub">Panel de administración — solo uso interno</div>
+        <input type="password" class="login-input" id="pw-input" placeholder="••••••••" maxlength="30"
+               onkeydown="if(event.key==='Enter')tryLogin()">
+        <button class="login-btn" onclick="tryLogin()">Ingresar</button>
+        <div class="login-error" id="login-error">Contraseña incorrecta</div>
+        <div class="login-attempts" id="login-attempts"></div>
+    </div>
+</div>
+
+<!-- ── ADMIN PANEL ── -->
+<div id="admin-panel">
+
+    <div class="admin-header">
+        <div class="admin-header-inner">
+            <div class="admin-title">
+                ⚙ BF Admin
+                <span>Panel de administración</span>
+            </div>
+            <div class="header-actions">
+                <a href="bf-index.html" target="_blank" class="btn btn-ghost">🌐 Ver sitio</a>
+                <button class="btn btn-red" onclick="logout()">🚪 Salir</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- TABS -->
+    <div class="admin-tabs">
+        <button class="admin-tab active" onclick="switchTab('novedades',this)">📰 Novedades</button>
+        <button class="admin-tab" onclick="switchTab('galeria',this)">🖼️ Galería</button>
+        <button class="admin-tab" onclick="switchTab('config',this)">⚙️ Configuración</button>
+    </div>
+
+    <div class="admin-content">
+
+        <!-- ══ TAB: NOVEDADES ══ -->
+        <div class="tab-panel active" id="tab-novedades">
+
+            <!-- Nueva novedad -->
+            <div class="panel-card">
+                <h3>➕ Nueva novedad</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Título</label>
+                        <input type="text" id="n-title" placeholder="Ej: Nuevo trailer entregado" maxlength="100" oninput="updateChar(this,'n-title-count')">
+                        <div class="char-count"><span id="n-title-count">0</span>/100</div>
+                    </div>
+                    <div class="form-group">
+                        <label>Fecha</label>
+                        <input type="date" id="n-date">
+                    </div>
+                </div>
+                <div class="form-row full">
+                    <div class="form-group">
+                        <label>Texto / descripción</label>
+                        <textarea id="n-text" placeholder="Contá los detalles del trabajo, novedad o proyecto..." maxlength="2000" oninput="updateChar(this,'n-text-count')"></textarea>
+                        <div class="char-count"><span id="n-text-count">0</span>/2000</div>
+                    </div>
+                </div>
+                <div class="form-row full">
+                    <div class="form-group">
+                        <label>Imagen (opcional)</label>
+                        <label class="img-upload-area" id="n-img-area">
+                            <input type="file" accept="image/*" id="n-img-input" onchange="previewImg(this)">
+                            <div id="n-img-placeholder">📷 Hacé clic para agregar una imagen</div>
+                            <img id="n-img-preview" class="img-preview" src="" alt="">
+                        </label>
+                    </div>
+                </div>
+                <button class="btn btn-orange" onclick="saveNovedad()" style="margin-top:.5rem">✅ Publicar novedad</button>
+            </div>
+
+            <!-- Lista de novedades -->
+            <div class="panel-card">
+                <h3>📋 Novedades publicadas</h3>
+                <div id="novedades-list"><p style="color:var(--muted);font-size:.9rem">Cargando...</p></div>
+            </div>
+        </div>
+
+        <!-- ══ TAB: GALERÍA ══ -->
+        <div class="tab-panel" id="tab-galeria">
+            <div class="panel-card">
+                <h3>🖼️ Gestión de fotos</h3>
+                <div class="cat-select-row" id="cat-pills">
+                    <button class="cat-pill active" onclick="selectCat('carrocerias',this)">🚛 Carrocerías</button>
+                    <button class="cat-pill" onclick="selectCat('estructuras',this)">🏗️ Estructuras</button>
+                    <button class="cat-pill" onclick="selectCat('equipamiento',this)">⚡ Equipamiento</button>
+                    <button class="cat-pill" onclick="selectCat('otros',this)">🔩 Otros</button>
+                </div>
+                <div class="photo-grid" id="admin-photo-grid">
+                    <!-- rendered -->
+                </div>
+            </div>
+        </div>
+
+        <!-- ══ TAB: CONFIG ══ -->
+        <div class="tab-panel" id="tab-config">
+            <div class="panel-card">
+                <h3>🔒 Cambiar contraseña</h3>
+                <div class="pw-grid">
+                    <div class="form-group">
+                        <label>Nueva contraseña</label>
+                        <input type="password" id="new-pw1" placeholder="Mínimo 6 caracteres">
+                    </div>
+                    <div class="form-group">
+                        <label>Repetir contraseña</label>
+                        <input type="password" id="new-pw2" placeholder="Repetí la contraseña">
+                    </div>
+                </div>
+                <button class="btn btn-orange" onclick="changePassword()" style="margin-top:1rem">Guardar contraseña</button>
+            </div>
+            <div class="panel-card">
+                <h3>🌐 Links rápidos</h3>
+                <div style="display:flex;gap:1rem;flex-wrap:wrap">
+                    <a href="bf-index.html" target="_blank" class="btn btn-ghost">Ver Novedades</a>
+                    <a href="bf-productos.html" target="_blank" class="btn btn-ghost">Ver Galería</a>
+                    <a href="bf-servicios.html" target="_blank" class="btn btn-ghost">Ver Servicios</a>
+                </div>
+            </div>
+        </div>
+
+    </div><!-- /admin-content -->
+</div><!-- /admin-panel -->
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ══════════════════════════════════════════
+//  PASSWORD  (hash SHA-256)
+// ══════════════════════════════════════════
+const DEFAULT_PW = 'bf2026';  // ← CAMBIÁ ESTO en la pestaña Configuración
+
+async function hashPw(pw) {
+    const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(pw));
+    return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
+}
+
+async function getStoredHash() {
+    try {
+        const r = await window.storage.get('bf-admin-pwhash', false);
+        return r ? r.value : null;
+    } catch(e) { return null; }
+}
+
+async function tryLogin() {
+    const pw = document.getElementById('pw-input').value;
+    if (!pw) return;
+
+    let storedHash = await getStoredHash();
+    // First time: save default password hash
+    if (!storedHash) {
+        storedHash = await hashPw(DEFAULT_PW);
+        await window.storage.set('bf-admin-pwhash', storedHash, false);
+    }
+
+    const inputHash = await hashPw(pw);
+    if (inputHash === storedHash) {
+        document.getElementById('login-screen').style.display = 'none';
+        document.getElementById('admin-panel').style.display = 'block';
+        await initAdmin();
+    } else {
+        const err = document.getElementById('login-error');
+        err.style.display = 'block';
+        document.getElementById('pw-input').value = '';
+        setTimeout(() => err.style.display = 'none', 3000);
+    }
+}
+
+async function changePassword() {
+    const p1 = document.getElementById('new-pw1').value;
+    const p2 = document.getElementById('new-pw2').value;
+    if (!p1 || p1.length < 6) { showToast('⚠️ La contraseña debe tener al menos 6 caracteres'); return; }
+    if (p1 !== p2) { showToast('⚠️ Las contraseñas no coinciden'); return; }
+    const hash = await hashPw(p1);
+    await window.storage.set('bf-admin-pwhash', hash, false);
+    document.getElementById('new-pw1').value = '';
+    document.getElementById('new-pw2').value = '';
+    showToast('✅ Contraseña actualizada correctamente');
+}
+
+function logout() {
+    document.getElementById('admin-panel').style.display = 'none';
+    document.getElementById('login-screen').style.display = 'flex';
+    document.getElementById('pw-input').value = '';
+}
+
+// ══════════════════════════════════════════
+//  TABS
+// ══════════════════════════════════════════
+function switchTab(name, btn) {
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.admin-tab').forEach(b => b.classList.remove('active'));
+    document.getElementById('tab-' + name).classList.add('active');
+    btn.classList.add('active');
+}
+
+// ══════════════════════════════════════════
+//  NOVEDADES
+// ══════════════════════════════════════════
+let novedades = [];
+let nImgData = null;
+
+async function loadNovedades() {
+    try {
+        const r = await window.storage.get('bf-novedades-index', true);
+        novedades = r ? JSON.parse(r.value) : [];
+    } catch(e) { novedades = []; }
+}
+
+async function saveNovedadesIndex() {
+    await window.storage.set('bf-novedades-index', JSON.stringify(novedades), true);
+}
+
+function renderNovedasList() {
+    const el = document.getElementById('novedades-list');
+    if (!novedades.length) { el.innerHTML = '<p style="color:var(--muted);font-size:.9rem">No hay novedades publicadas todavía.</p>'; return; }
+    const sorted = [...novedades].sort((a,b) => b.date.localeCompare(a.date));
+    el.innerHTML = '';
+    sorted.forEach(n => {
+        const row = document.createElement('div');
+        row.className = 'novedad-row';
+        row.innerHTML =
+            '<div class="novedad-row-thumb">' +
+                (n.img ? '<img src="' + n.img + '">' : '📰') +
+            '</div>' +
+            '<div class="novedad-row-info">' +
+                '<div class="novedad-row-title">' + escHtml(n.title) + '</div>' +
+                '<div class="novedad-row-date">' + formatDate(n.date) + '</div>' +
+            '</div>' +
+            '<div class="novedad-row-actions">' +
+                '<button class="btn-sm del" onclick="deleteNovedad(\'' + n.id + '\')">🗑️ Borrar</button>' +
+            '</div>';
+        el.appendChild(row);
+    });
+}
+
+function previewImg(input) {
+    const file = input.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = e => {
+        nImgData = e.target.result;
+        const prev = document.getElementById('n-img-preview');
+        const ph = document.getElementById('n-img-placeholder');
+        prev.src = nImgData;
+        prev.classList.add('show');
+        ph.style.display = 'none';
+    };
+    reader.readAsDataURL(file);
+}
+
+async function saveNovedad() {
+    const title = document.getElementById('n-title').value.trim();
+    const date  = document.getElementById('n-date').value;
+    const text  = document.getElementById('n-text').value.trim();
+    if (!title) { showToast('⚠️ El título es obligatorio'); return; }
+    if (!date)  { showToast('⚠️ La fecha es obligatoria'); return; }
+    if (!text)  { showToast('⚠️ El texto es obligatorio'); return; }
+
+    const id = 'n' + Date.now();
+    const novedad = { id, title, date, text, img: nImgData || null };
+
+    // Save image separately if exists
+    if (nImgData) {
+        await window.storage.set('bf-novedad-img-' + id, nImgData, true);
+        novedad.img = 'STORED:' + id; // reference
+    }
+
+    novedades.push(novedad);
+    await saveNovedadesIndex();
+
+    // Reset form
+    document.getElementById('n-title').value = '';
+    document.getElementById('n-date').value = '';
+    document.getElementById('n-text').value = '';
+    document.getElementById('n-img-preview').classList.remove('show');
+    document.getElementById('n-img-placeholder').style.display = '';
+    document.getElementById('n-img-input').value = '';
+    nImgData = null;
+    updateChar(document.getElementById('n-title'), 'n-title-count');
+    updateChar(document.getElementById('n-text'), 'n-text-count');
+
+    renderNovedasList();
+    showToast('✅ Novedad publicada correctamente');
+}
+
+async function deleteNovedad(id) {
+    if (!confirm('¿Eliminar esta novedad?')) return;
+    try { await window.storage.delete('bf-novedad-img-' + id, true); } catch(e){}
+    novedades = novedades.filter(n => n.id !== id);
+    await saveNovedadesIndex();
+    renderNovedasList();
+    showToast('🗑️ Novedad eliminada');
+}
+
+// ══════════════════════════════════════════
+//  GALLERY
+// ══════════════════════════════════════════
+const CATS = ['carrocerias','estructuras','equipamiento','otros'];
+let photos = { carrocerias:[], estructuras:[], equipamiento:[], otros:[] };
+let activeCat = 'carrocerias';
+
+async function loadPhotos() {
+    for (const cat of CATS) {
+        try {
+            const r = await window.storage.get('bf-index-' + cat, true);
+            if (!r) continue;
+            const index = JSON.parse(r.value);
+            photos[cat] = [];
+            for (const item of index) {
+                try {
+                    const d = await window.storage.get('bf-photo-' + item.id, true);
+                    if (d) photos[cat].push({ id: item.id, name: item.name, data: d.value });
+                } catch(e){}
+            }
+        } catch(e){}
+    }
+}
+
+async function savePhotoCat(cat) {
+    const index = photos[cat].map(p => ({ id:p.id, name:p.name }));
+    await window.storage.set('bf-index-' + cat, JSON.stringify(index), true);
+    for (const p of photos[cat]) {
+        await window.storage.set('bf-photo-' + p.id, p.data, true);
+    }
+}
+
+function selectCat(cat, btn) {
+    activeCat = cat;
+    document.querySelectorAll('.cat-pill').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    renderPhotoGrid();
+}
+
+function renderPhotoGrid() {
+    const grid = document.getElementById('admin-photo-grid');
+    grid.innerHTML = '';
+    for (const p of photos[activeCat]) {
+        const card = document.createElement('div');
+        card.className = 'photo-admin-card';
+        card.dataset.id = p.id;
+        card.innerHTML =
+            '<img src="' + p.data + '" alt="' + escHtml(p.name) + '">' +
+            '<div class="photo-admin-caption">' +
+                '<span class="photo-admin-name" id="aname-' + p.id + '">' + escHtml(p.name) + '</span>' +
+                '<div style="display:flex;gap:.3rem;flex-shrink:0">' +
+                    '<button class="btn-sm" onclick="startRename(\'' + p.id + '\')">✏️</button>' +
+                    '<button class="btn-sm del" onclick="deletePhoto(\'' + p.id + '\',\'' + activeCat + '\')">🗑️</button>' +
+                '</div>' +
+            '</div>';
+        grid.appendChild(card);
+    }
+    // Add tile
+    const addTile = document.createElement('label');
+    addTile.className = 'add-photo-tile';
+    addTile.innerHTML = '<input type="file" accept="image/*" multiple onchange="addPhotos(this,\'' + activeCat + '\')"><span>＋</span><p>Agregar foto</p>';
+    grid.appendChild(addTile);
+}
+
+function addPhotos(input, cat) {
+    const files = Array.from(input.files);
+    let done = 0;
+    files.forEach(file => {
+        const reader = new FileReader();
+        reader.onload = async e => {
+            const id = 'p' + Date.now() + Math.random().toString(36).slice(2,6);
+            photos[cat].push({ id, name: file.name.replace(/\.[^.]+$/,''), data: e.target.result });
+            await savePhotoCat(cat);
+            done++;
+            if (done === files.length) {
+                renderPhotoGrid();
+                showToast('✅ ' + done + ' foto(s) guardada(s)');
+            }
+        };
+        reader.readAsDataURL(file);
+    });
+    input.value = '';
+}
+
+function startRename(id) {
+    const el = document.getElementById('aname-' + id);
+    const prev = el.textContent;
+    const inp = document.createElement('input');
+    inp.className = 'rename-inline';
+    inp.value = prev;
+    const finish = async () => {
+        const val = inp.value.trim() || prev;
+        const p = photos[activeCat].find(x => x.id === id);
+        if (p) {
+            p.name = val;
+            await savePhotoCat(activeCat);
+        }
+        renderPhotoGrid();
+        showToast('✅ Renombrada a "' + val + '"');
+    };
+    inp.onkeydown = e => { if(e.key==='Enter') finish(); if(e.key==='Escape'){renderPhotoGrid();} };
+    inp.onblur = finish;
+    el.replaceWith(inp);
+    inp.focus(); inp.select();
+}
+
+async function deletePhoto(id, cat) {
+    if (!confirm('¿Eliminar esta foto?')) return;
+    try { await window.storage.delete('bf-photo-' + id, true); } catch(e){}
+    photos[cat] = photos[cat].filter(p => p.id !== id);
+    await savePhotoCat(cat);
+    renderPhotoGrid();
+    showToast('🗑️ Foto eliminada');
+}
+
+// ══════════════════════════════════════════
+//  HELPERS
+// ══════════════════════════════════════════
+function updateChar(el, countId) {
+    document.getElementById(countId).textContent = el.value.length;
+}
+function escHtml(s) { return String(s).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function formatDate(iso) {
+    return new Date(iso).toLocaleDateString('es-AR', {day:'2-digit',month:'long',year:'numeric'});
+}
+let _tt;
+function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg; t.classList.add('show');
+    clearTimeout(_tt); _tt = setTimeout(() => t.classList.remove('show'), 3500);
+}
+
+// ══════════════════════════════════════════
+//  INIT
+// ══════════════════════════════════════════
+async function initAdmin() {
+    await Promise.all([loadNovedades(), loadPhotos()]);
+    renderNovedasList();
+    renderPhotoGrid();
+    // Default date = today
+    document.getElementById('n-date').value = new Date().toISOString().slice(0,10);
+}
+</script>
+</body>
+</html>

@@ -235,6 +235,25 @@
         <!-- TAB CONFIG -->
         <div class="tab-panel" id="tab-config">
             <div class="panel-card">
+                <h3>🔑 Configuración JSONBin</h3>
+                <div class="info-box">
+                    <span>ℹ️</span>
+                    <span>JSONBin guarda las novedades y el índice de fotos en la nube. Configuralo una sola vez y todo funciona automáticamente para todos los visitantes.</span>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Master Key (privada)</label>
+                        <input type="password" id="jb-key" placeholder="$2a$10$...">
+                    </div>
+                    <div class="form-group">
+                        <label>Bin ID — Novedades</label>
+                        <input type="text" id="jb-bin" placeholder="Se crea automáticamente">
+                    </div>
+                </div>
+                <button class="btn btn-orange" onclick="saveJsonbinConfig()">Guardar y crear Bins →</button>
+                <p style="font-size:.78rem;color:var(--muted);margin-top:.8rem">La Master Key se guarda solo en este navegador, nunca se sube al servidor.</p>
+            </div>
+            <div class="panel-card">
                 <h3>🔒 Cambiar contraseña</h3>
                 <div class="pw-grid">
                     <div class="form-group">
@@ -267,7 +286,7 @@
 //  CLOUDINARY CONFIG
 // ══════════════════════════════════════════
 const CLOUD_NAME   = 'dtmgoqeuq';
-const UPLOAD_PRESET = 'upgkqsao';
+const UPLOAD_PRESET = 'ml_default';
 const CLOUDINARY_URL = 'https://api.cloudinary.com/v1_1/' + CLOUD_NAME + '/image/upload';
 
 async function uploadToCloudinary(file, folder) {
@@ -327,8 +346,46 @@ function logout() {
 }
 
 // ══════════════════════════════════════════
-//  TABS
+//  JSONBIN — Novedades (base de datos pública)
 // ══════════════════════════════════════════
+const JSONBIN_ACCOUNT = '6999fbc51a35bc0895802e57';
+let JSONBIN_KEY  = localStorage.getItem('bf-jsonbin-key') || '';
+let JSONBIN_BIN  = localStorage.getItem('bf-jsonbin-bin') || '';
+
+async function jsonbinLoad() {
+    if (!JSONBIN_BIN) return [];
+    const res = await fetch('https://api.jsonbin.io/v3/b/' + JSONBIN_BIN + '/latest', {
+        headers: { 'X-Master-Key': JSONBIN_KEY }
+    });
+    if (!res.ok) return [];
+    const data = await res.json();
+    return data.record || [];
+}
+
+async function jsonbinSave(list) {
+    if (!JSONBIN_BIN || !JSONBIN_KEY) {
+        showToast('⚠️ Configurá JSONBin en la pestaña Configuración');
+        return false;
+    }
+    const res = await fetch('https://api.jsonbin.io/v3/b/' + JSONBIN_BIN, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', 'X-Master-Key': JSONBIN_KEY },
+        body: JSON.stringify(list)
+    });
+    return res.ok;
+}
+
+async function createBin() {
+    // Crea un bin nuevo si no existe
+    const res = await fetch('https://api.jsonbin.io/v3/b', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'X-Master-Key': JSONBIN_KEY, 'X-Bin-Name': 'bf-novedades', 'X-Bin-Private': 'false' },
+        body: JSON.stringify([])
+    });
+    if (!res.ok) return null;
+    const data = await res.json();
+    return data.metadata.id;
+}
 function switchTab(name, btn) {
     document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
     document.querySelectorAll('.admin-tab').forEach(b => b.classList.remove('active'));
@@ -345,13 +402,12 @@ let nImgPreviewUrl = null;
 
 async function loadNovedades() {
     try {
-        const r = localStorage.getItem('bf-novedades');
-        novedades = r ? JSON.parse(r) : [];
+        novedades = await jsonbinLoad();
     } catch(e) { novedades = []; }
 }
 
 async function saveNovedadesIndex() {
-    localStorage.setItem('bf-novedades', JSON.stringify(novedades));
+    await jsonbinSave(novedades);
 }
 
 function handleNovedadImg(input) {
@@ -467,6 +523,26 @@ async function loadPhotos() {
 
 async function savePhotoIndex(cat) {
     localStorage.setItem('bf-cl-index-' + cat, JSON.stringify(photos[cat]));
+    // Sync all categories to JSONBin
+    const allPhotos = {};
+    CATS.forEach(c => allPhotos[c] = photos[c]);
+    try {
+        let binId = localStorage.getItem('bf-jsonbin-photos');
+        if (!binId && JSONBIN_KEY) {
+            const res = await fetch('https://api.jsonbin.io/v3/b', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'X-Master-Key': JSONBIN_KEY, 'X-Bin-Name': 'bf-fotos', 'X-Bin-Private': 'false' },
+                body: JSON.stringify(allPhotos)
+            });
+            if (res.ok) { const d = await res.json(); binId = d.metadata.id; localStorage.setItem('bf-jsonbin-photos', binId); }
+        } else if (binId && JSONBIN_KEY) {
+            await fetch('https://api.jsonbin.io/v3/b/' + binId, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json', 'X-Master-Key': JSONBIN_KEY },
+                body: JSON.stringify(allPhotos)
+            });
+        }
+    } catch(e) {}
 }
 
 function selectCat(cat, btn) {
@@ -575,10 +651,44 @@ function showToast(msg) {
     clearTimeout(_tt); _tt = setTimeout(()=>t.classList.remove('show'), 3500);
 }
 
+async function saveJsonbinConfig() {
+    const key = document.getElementById('jb-key').value.trim();
+    const bin = document.getElementById('jb-bin').value.trim();
+    if (!key) { showToast('⚠️ Ingresá la Master Key'); return; }
+
+    JSONBIN_KEY = key;
+    localStorage.setItem('bf-jsonbin-key', key);
+
+    if (bin) {
+        JSONBIN_BIN = bin;
+        localStorage.setItem('bf-jsonbin-bin', bin);
+        showToast('✅ Configuración guardada');
+        return;
+    }
+
+    // Crear bin nuevo automáticamente
+    showToast('⏳ Creando bin de novedades...');
+    const newBin = await createBin();
+    if (newBin) {
+        JSONBIN_BIN = newBin;
+        localStorage.setItem('bf-jsonbin-bin', newBin);
+        document.getElementById('jb-bin').value = newBin;
+        showToast('✅ Bin creado: ' + newBin);
+    } else {
+        showToast('⚠️ Error al crear bin. Verificá la Master Key.');
+    }
+}
+
 // ══════════════════════════════════════════
 //  INIT
 // ══════════════════════════════════════════
 async function initAdmin() {
+    // Pre-fill config fields if saved
+    const savedKey = localStorage.getItem('bf-jsonbin-key');
+    const savedBin = localStorage.getItem('bf-jsonbin-bin');
+    if (savedKey) document.getElementById('jb-key').value = savedKey;
+    if (savedBin) document.getElementById('jb-bin').value = savedBin;
+
     await Promise.all([loadNovedades(), loadPhotos()]);
     renderNovedasList();
     renderPhotoGrid();

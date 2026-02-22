@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="BF Productos y Servicios — Taller metalúrgico especializado en carrocerías, estructuras y equipamiento para línea pesada, 4x4 y minería desde 1960.">
+    <title>BF Productos y Servicios — Taller Metalúrgico</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Open+Sans:wght@300;400;600&display=swap');
+        *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+        :root {
+            --orange: #ff6600;
+            --orange-dark: #cc5000;
+            --bg: #111111;
+            --card: #1c1c1c;
+            --card2: #242424;
+            --border: #2c2c2c;
+            --text: #d4d4d4;
+            --muted: #888;
+            --green: #25d366;
+        }
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Open Sans', sans-serif; background: var(--bg); color: var(--text); line-height: 1.65; }
+        a { color: var(--orange); text-decoration: none; }
+        a:hover { text-decoration: underline; }
+        img { max-width: 100%; display: block; }
+
+        /* LOADING */
+        #loading-overlay { position:fixed; inset:0; background:#111; display:flex; flex-direction:column; align-items:center; justify-content:center; z-index:9999; gap:1rem; transition:opacity .4s; }
+        #loading-overlay p { color:#888; font-size:.95rem; }
+        .spinner { width:40px; height:40px; border:3px solid #333; border-top-color:var(--orange); border-radius:50%; animation:spin .7s linear infinite; }
+        @keyframes spin { to { transform:rotate(360deg); } }
+
+        /* HEADER */
+        header { background:linear-gradient(to right,#070707,#151515); border-bottom:3px solid var(--orange); padding:.8rem 0 0; position:sticky; top:0; z-index:1000; box-shadow:0 4px 30px rgba(255,102,0,.2); }
+        .container { max-width:1200px; margin:0 auto; padding:0 2rem; }
+        .header-top { display:flex; align-items:flex-start; justify-content:space-between; flex-wrap:wrap; gap:.5rem; padding-bottom:.6rem; }
+        h1 { font-family:'Oswald',sans-serif; color:var(--orange); font-size:1.8rem; text-transform:uppercase; letter-spacing:3px; line-height:1.1; }
+        .tagline { color:var(--muted); font-size:.82rem; font-style:italic; margin-top:2px; }
+        .header-badge { background:rgba(255,102,0,.1); border:1px solid rgba(255,102,0,.25); border-radius:4px; padding:.25rem .7rem; font-size:.75rem; color:var(--orange); font-family:'Oswald',sans-serif; letter-spacing:1px; text-transform:uppercase; white-space:nowrap; align-self:flex-start; }
+        nav { display:flex; justify-content:center; gap:0; flex-wrap:wrap; }
+        nav a { color:#aaa; font-family:'Oswald',sans-serif; font-size:.95rem; font-weight:600; padding:.55rem 1.6rem; border:none; border-right:1px solid #333; background:#1a1a1a; transition:all .3s; text-transform:uppercase; letter-spacing:1px; }
+        nav a:first-child { border-left:1px solid #333; }
+        nav a:hover, nav a.active { background:var(--orange); color:#fff; text-decoration:none; }
+
+        /* HERO */
+        .hero { position:relative; overflow:hidden; padding:6rem 0; text-align:center; background:linear-gradient(rgba(0,0,0,.78),rgba(0,0,0,.88)), repeating-linear-gradient(45deg,#1a1a1a 0,#1a1a1a 2px,#141414 2px,#141414 22px); }
+        .hero::before { content:''; position:absolute; inset:0; background:radial-gradient(ellipse at 50% 0%, rgba(255,102,0,.12) 0%, transparent 70%); pointer-events:none; }
+        .hero-eyebrow { font-family:'Oswald',sans-serif; font-size:.85rem; color:var(--orange); text-transform:uppercase; letter-spacing:4px; margin-bottom:1rem; }
+        .hero h2 { font-family:'Oswald',sans-serif; font-size:3.4rem; color:#fff; text-transform:uppercase; letter-spacing:4px; line-height:1.1; }
+        .hero h2 span { color:var(--orange); }
+        .hero-sub { color:var(--muted); font-size:1.1rem; margin-top:1rem; max-width:580px; margin-left:auto; margin-right:auto; }
+        .hero-stats { display:flex; justify-content:center; gap:3rem; margin-top:3rem; flex-wrap:wrap; }
+        .stat { text-align:center; }
+        .stat-num { font-family:'Oswald',sans-serif; font-size:2.2rem; color:var(--orange); font-weight:700; line-height:1; }
+        .stat-label { font-size:.78rem; color:var(--muted); text-transform:uppercase; letter-spacing:1px; margin-top:.3rem; }
+        .hero-btns { display:flex; gap:1rem; justify-content:center; margin-top:3rem; flex-wrap:wrap; }
+        .btn-primary { background:var(--orange); color:#fff; font-family:'Oswald',sans-serif; font-size:1rem; padding:.85rem 2.2rem; border-radius:4px; text-transform:uppercase; letter-spacing:1px; transition:all .3s; border:2px solid var(--orange); }
+        .btn-primary:hover { background:var(--orange-dark); border-color:var(--orange-dark); text-decoration:none; }
+        .btn-secondary { background:transparent; color:#ccc; font-family:'Oswald',sans-serif; font-size:1rem; padding:.85rem 2.2rem; border-radius:4px; text-transform:uppercase; letter-spacing:1px; border:2px solid #444; transition:all .3s; }
+        .btn-secondary:hover { border-color:var(--orange); color:var(--orange); text-decoration:none; }
+
+        /* SERVICIOS STRIP */
+        .servicios-strip { background:var(--card); border-top:1px solid var(--border); border-bottom:1px solid var(--border); padding:2.5rem 0; }
+        .servicios-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:1.5rem; }
+        .servicio-item { text-align:center; padding:1.2rem; border-radius:6px; transition:background .2s; }
+        .servicio-item:hover { background:var(--card2); }
+        .servicio-icon { font-size:2rem; margin-bottom:.5rem; }
+        .servicio-name { font-family:'Oswald',sans-serif; font-size:.9rem; color:#ccc; text-transform:uppercase; letter-spacing:1px; }
+
+        /* SECTION */
+        .section-header { text-align:center; margin-bottom:3rem; }
+        .section-header h2 { font-family:'Oswald',sans-serif; font-size:2rem; color:var(--orange); text-transform:uppercase; letter-spacing:3px; }
+        .section-header p { color:var(--muted); margin-top:.5rem; font-size:.95rem; }
+        .section-divider { width:60px; height:3px; background:var(--orange); margin:.8rem auto 0; border-radius:2px; }
+
+        /* NOVEDADES */
+        .novedades-section { padding:5rem 0; }
+        .novedades-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(320px,1fr)); gap:1.5rem; }
+        .novedad-card { background:var(--card2); border:1px solid var(--border); border-radius:8px; overflow:hidden; transition:all .3s; cursor:pointer; }
+        .novedad-card:hover { border-color:var(--orange); transform:translateY(-5px); box-shadow:0 10px 32px rgba(255,102,0,.2); }
+        .novedad-img { width:100%; aspect-ratio:16/9; object-fit:cover; }
+        .novedad-img-placeholder { width:100%; aspect-ratio:16/9; background:linear-gradient(135deg,#1e1e1e,#2a2a2a); display:flex; align-items:center; justify-content:center; font-size:2.5rem; color:#333; }
+        .novedad-body { padding:1.2rem 1.4rem 1.4rem; }
+        .novedad-date { font-size:.75rem; color:var(--orange); text-transform:uppercase; letter-spacing:1px; margin-bottom:.4rem; }
+        .novedad-title { font-family:'Oswald',sans-serif; font-size:1.15rem; color:#fff; margin-bottom:.6rem; line-height:1.3; }
+        .novedad-text { font-size:.88rem; color:var(--muted); line-height:1.65; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; }
+        .novedad-readmore { font-size:.8rem; color:var(--orange); margin-top:.7rem; font-family:'Oswald',sans-serif; text-transform:uppercase; letter-spacing:1px; }
+        .no-novedades { grid-column:1/-1; text-align:center; padding:4rem 1rem; color:var(--muted); }
+        .no-novedades span { display:block; font-size:3rem; margin-bottom:1rem; opacity:.25; }
+
+        /* MODAL */
+        .modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.9); z-index:8000; align-items:center; justify-content:center; padding:1.5rem; }
+        .modal-overlay.open { display:flex; }
+        .modal-box { background:var(--card); border:1px solid var(--border); border-radius:10px; max-width:720px; width:100%; max-height:90vh; overflow-y:auto; position:relative; }
+        .modal-box img { width:100%; aspect-ratio:16/9; object-fit:cover; border-radius:10px 10px 0 0; }
+        .modal-content { padding:2rem; }
+        .modal-date { font-size:.78rem; color:var(--orange); text-transform:uppercase; letter-spacing:1px; margin-bottom:.5rem; }
+        .modal-title { font-family:'Oswald',sans-serif; font-size:1.9rem; color:#fff; margin-bottom:1.2rem; line-height:1.2; }
+        .modal-text { color:var(--muted); line-height:1.85; white-space:pre-wrap; font-size:.95rem; }
+        .modal-close { position:absolute; top:1rem; right:1rem; background:var(--orange); color:#fff; border:none; border-radius:50%; width:2.2rem; height:2.2rem; font-size:1.1rem; cursor:pointer; display:flex; align-items:center; justify-content:center; z-index:1; }
+        .modal-close:hover { background:var(--orange-dark); }
+
+        /* CONTACTO */
+        .contacto-section { padding:5rem 0; background:linear-gradient(180deg,var(--bg) 0%,#0d0d0d 100%); }
+        .contacto-grid { display:grid; grid-template-columns:1fr 1fr; gap:3rem; margin-top:3rem; }
+        .contacto-left { display:flex; flex-direction:column; gap:1.4rem; }
+        .info-card { background:var(--card2); border:1px solid var(--border); border-left:4px solid var(--orange); border-radius:6px; padding:1.1rem 1.3rem; display:flex; align-items:flex-start; gap:1rem; }
+        .info-icon { font-size:1.5rem; flex-shrink:0; margin-top:.1rem; }
+        .info-body h4 { font-family:'Oswald',sans-serif; font-size:.95rem; color:#ddd; text-transform:uppercase; letter-spacing:1px; margin-bottom:.3rem; }
+        .info-body p, .info-body a { font-size:.9rem; color:var(--muted); line-height:1.7; }
+        .info-body a { color:var(--orange); }
+        .info-body a:hover { color:#ff8833; }
+        .map-wrap { border-radius:8px; overflow:hidden; border:1px solid var(--border); height:220px; }
+        .map-wrap iframe { width:100%; height:100%; border:0; display:block; }
+        .map-link { display:inline-flex; align-items:center; gap:.4rem; margin-top:.7rem; font-size:.83rem; color:var(--orange); font-family:'Oswald',sans-serif; text-transform:uppercase; letter-spacing:1px; }
+        .map-link:hover { color:#ff8833; text-decoration:none; }
+        .contact-form { background:var(--card2); border:1px solid var(--border); border-radius:8px; padding:2rem; }
+        .contact-form h3 { font-family:'Oswald',sans-serif; color:var(--orange); font-size:1.2rem; text-transform:uppercase; letter-spacing:2px; margin-bottom:1.5rem; }
+        .form-group { margin-bottom:1rem; }
+        .form-group label { display:block; font-size:.78rem; color:var(--muted); text-transform:uppercase; letter-spacing:.5px; margin-bottom:.35rem; }
+        .form-group input, .form-group textarea, .form-group select { width:100%; background:#161616; border:1px solid #333; border-radius:5px; color:#ddd; font-size:.93rem; padding:.7rem .95rem; outline:none; font-family:'Open Sans',sans-serif; transition:border-color .2s; }
+        .form-group input:focus, .form-group textarea:focus, .form-group select:focus { border-color:var(--orange); }
+        .form-group select option { background:#1a1a1a; }
+        .form-group textarea { resize:vertical; min-height:110px; }
+        .form-row2 { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+        .submit-btn { width:100%; background:var(--orange); color:#fff; border:none; padding:.9rem; border-radius:5px; font-family:'Oswald',sans-serif; font-size:1rem; text-transform:uppercase; letter-spacing:2px; cursor:pointer; transition:background .2s; margin-top:.5rem; }
+        .submit-btn:hover { background:var(--orange-dark); }
+        .form-hint { font-size:.73rem; color:var(--muted); margin-top:.7rem; text-align:center; }
+        .form-success { display:none; text-align:center; padding:2rem 1rem; }
+        .form-success span { font-size:3rem; display:block; margin-bottom:.8rem; }
+        .form-success p { color:var(--muted); font-size:.95rem; }
+
+        /* FOOTER */
+        footer { background:#080808; border-top:2px solid var(--border); padding:3rem 0 1.5rem; position:relative; }
+        .footer-grid { display:grid; grid-template-columns:2fr 1fr 1fr; gap:3rem; margin-bottom:2.5rem; }
+        .footer-brand h3 { font-family:'Oswald',sans-serif; color:var(--orange); font-size:1.2rem; text-transform:uppercase; letter-spacing:2px; margin-bottom:.6rem; }
+        .footer-brand p { color:var(--muted); font-size:.86rem; line-height:1.75; max-width:340px; }
+        .footer-col h4 { font-family:'Oswald',sans-serif; color:#bbb; font-size:.85rem; text-transform:uppercase; letter-spacing:1.5px; margin-bottom:1rem; }
+        .footer-col ul { list-style:none; }
+        .footer-col ul li { margin-bottom:.5rem; }
+        .footer-col ul li a { color:var(--muted); font-size:.86rem; transition:color .2s; }
+        .footer-col ul li a:hover { color:var(--orange); text-decoration:none; }
+        .footer-bottom { border-top:1px solid var(--border); padding-top:1.2rem; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:.5rem; }
+        .footer-bottom p { color:#444; font-size:.78rem; }
+        .secret-trigger { cursor:default; user-select:none; color:transparent; font-size:1px; position:absolute; bottom:.8rem; right:1.5rem; padding:1.2rem; }
+
+        /* WHATSAPP */
+        .whatsapp-float { position:fixed; bottom:2rem; right:2rem; background:var(--green); border-radius:50%; width:3.6rem; height:3.6rem; display:flex; align-items:center; justify-content:center; box-shadow:0 4px 20px rgba(37,211,102,.4); transition:transform .3s; z-index:500; }
+        .whatsapp-float:hover { transform:scale(1.12); text-decoration:none; }
+
+        /* BACK TO TOP */
+        .back-top { position:fixed; bottom:6.5rem; right:2.1rem; background:var(--card2); border:1px solid var(--border); border-radius:50%; width:2.8rem; height:2.8rem; display:flex; align-items:center; justify-content:center; color:var(--muted); cursor:pointer; transition:all .3s; z-index:499; opacity:0; pointer-events:none; font-size:1.1rem; }
+        .back-top.visible { opacity:1; pointer-events:all; }
+        .back-top:hover { border-color:var(--orange); color:var(--orange); }
+
+        /* TOAST */
+        .toast { position:fixed; bottom:5.5rem; left:50%; transform:translateX(-50%) translateY(12px); background:#1e1e1e; color:#ccc; border-left:3px solid var(--orange); padding:.75rem 1.5rem; border-radius:5px; font-size:.88rem; opacity:0; transition:all .3s; pointer-events:none; white-space:nowrap; z-index:9000; }
+        .toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+
+        @media (max-width:900px) { .contacto-grid { grid-template-columns:1fr; } .footer-grid { grid-template-columns:1fr 1fr; } .footer-brand { grid-column:1/-1; } }
+        @media (max-width:640px) { h1 { font-size:1.5rem; } .hero h2 { font-size:2.2rem; } .hero-stats { gap:1.5rem; } .stat-num { font-size:1.8rem; } .footer-grid { grid-template-columns:1fr; } .form-row2 { grid-template-columns:1fr; } .novedades-grid { grid-template-columns:1fr; } .header-badge { display:none; } }
+    </style>
+</head>
+<body>
+
+<div id="loading-overlay"><div class="spinner"></div><p>Cargando...</p></div>
+
+<header>
+    <div class="container">
+        <div class="header-top">
+            <div>
+                <h1>⚙ BF Productos y Servicios</h1>
+                <p class="tagline">Taller Metalúrgico — Soluciones profesionales en metal y soldadura</p>
+            </div>
+            <span class="header-badge">Desde 1960</span>
+        </div>
+        <nav>
+            <a href="index.html" class="active">Inicio</a>
+            <a href="bf-productos.html">Galería</a>
+            <a href="#contacto">Contacto</a>
+        </nav>
+    </div>
+</header>
+
+<section class="hero">
+    <div class="container">
+        <p class="hero-eyebrow">Taller metalúrgico · Mendoza, Argentina</p>
+        <h2>Soluciones en <span>Metal</span><br>de Alta Calidad</h2>
+        <p class="hero-sub">Fabricación, reparación y equipamiento para línea pesada, 4×4 y minería. Más de 60 años de experiencia.</p>
+        <div class="hero-stats">
+            <div class="stat"><div class="stat-num">+60</div><div class="stat-label">Años de experiencia</div></div>
+            <div class="stat"><div class="stat-num">MIG·TIG</div><div class="stat-label">Soldadura especializada</div></div>
+            <div class="stat"><div class="stat-num">4×4</div><div class="stat-label">Equipamiento especial</div></div>
+        </div>
+        <div class="hero-btns">
+            <a href="bf-productos.html" class="btn-primary">Ver nuestros trabajos</a>
+            <a href="#contacto" class="btn-secondary">Contactanos</a>
+        </div>
+    </div>
+</section>
+
+<div class="servicios-strip">
+    <div class="container">
+        <div class="servicios-grid">
+            <div class="servicio-item"><div class="servicio-icon">🚛</div><div class="servicio-name">Carrocerías</div></div>
+            <div class="servicio-item"><div class="servicio-icon">🏗️</div><div class="servicio-name">Estructuras</div></div>
+            <div class="servicio-item"><div class="servicio-icon">🔧</div><div class="servicio-name">Soldadura</div></div>
+            <div class="servicio-item"><div class="servicio-icon">⚡</div><div class="servicio-name">Equipamiento</div></div>
+            <div class="servicio-item"><div class="servicio-icon">🚜</div><div class="servicio-name">Línea pesada</div></div>
+            <div class="servicio-item"><div class="servicio-icon">🔩</div><div class="servicio-name">Piezas a medida</div></div>
+        </div>
+    </div>
+</div>
+
+<section class="novedades-section" id="novedades">
+    <div class="container">
+        <div class="section-header">
+            <h2>Novedades</h2>
+            <div class="section-divider"></div>
+            <p>Últimos proyectos, trabajos y noticias del taller</p>
+        </div>
+        <div class="novedades-grid" id="novedades-grid"></div>
+    </div>
+</section>
+
+<section class="contacto-section" id="contacto">
+    <div class="container">
+        <div class="section-header">
+            <h2>Contacto</h2>
+            <div class="section-divider"></div>
+            <p>Estamos para ayudarte — respondemos a la brevedad</p>
+        </div>
+        <div class="contacto-grid">
+            <div class="contacto-left">
+                <div class="info-card">
+                    <div class="info-icon">📍</div>
+                    <div class="info-body">
+                        <h4>Ubicación</h4>
+                        <p>Ruta 50 2541,Pedregal, Rodeo del Medio<br>Mendoza, Argentina</p>
+                    </div>
+                </div>
+                <div class="info-card">
+                    <div class="info-icon">📱</div>
+                    <div class="info-body">
+                        <h4>WhatsApp</h4>
+                        <p><a href="https://wa.me/5492615528091" target="_blank" rel="noopener">Escribinos por WhatsApp →</a><br>
+                        Lun–Vie: 8:00 – 18:00 hs · Sáb: 8:00 – 13:00 hs</p>
+                    </div>
+                </div>
+                <div class="info-card">
+                    <div class="info-icon">✉️</div>
+                    <div class="info-body">
+                        <h4>Email</h4>
+                        <p><a href="mailto:bfproductosyservicios@gmail.com">bfproductosyservicios@gmail.com</a><br>
+                        Respondemos dentro de las 24 hs</p>
+                    </div>
+                </div>
+                <div class="info-card">
+                    <div class="info-icon">🕐</div>
+                    <div class="info-body">
+                        <h4>Horario de atención</h4>
+                        <p>Lunes a Viernes: 8:00 – 18:00 hs<br>
+                        Sábados: 8:00 – 13:00 hs<br>
+                        Domingos y feriados: cerrado</p>
+                    </div>
+                </div>
+                <div>
+                    <div class="map-wrap">
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3399.575578948402!2d-68.70651395982902!3d-32.970158573693496!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x967e6d3c5d6eae33%3A0xbc9ffec021b1a968!2sBocchi%20Malanca%20Carrocerias!5e1!3m2!1ses-419!2sar!4v1771687107886!5m2!1ses-419!2sar" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                    </div>
+                    <a href="https://share.google/cF3YX1ZZ8mhxVCasz" target="_blank" rel="noopener" class="map-link">📍 Abrir en Google Maps →</a>
+                </div>
+            </div>
+            <div>
+                <div class="contact-form">
+                    <h3>📨 Envianos tu consulta</h3>
+                    <div id="contact-form-inner">
+                        <div class="form-row2">
+                            <div class="form-group"><label>Nombre completo *</label><input type="text" id="nombre" placeholder="Tu nombre"></div>
+                            <div class="form-group"><label>Teléfono</label><input type="tel" id="telefono" placeholder="011 1234-5678"></div>
+                        </div>
+                        <div class="form-group"><label>Email *</label><input type="email" id="email" placeholder="tu@email.com"></div>
+                        <div class="form-group">
+                            <label>Asunto</label>
+                            <select id="asunto">
+                                <option value="">Seleccioná el tema...</option>
+                                <option>Consulta sobre carrocerías</option>
+                                <option>Consulta sobre estructuras</option>
+                                <option>Consulta sobre equipamiento</option>
+                                <option>Presupuesto</option>
+                                <option>Otro</option>
+                            </select>
+                        </div>
+                        <div class="form-group"><label>Mensaje *</label><textarea id="mensaje" placeholder="Contanos qué necesitás..."></textarea></div>
+                        <button class="submit-btn" onclick="sendForm()">Enviar por WhatsApp →</button>
+                        <p class="form-hint">Al enviar se abrirá WhatsApp con tu consulta ya redactada.</p>
+                    </div>
+                    <div class="form-success" id="form-success">
+                        <span>✅</span>
+                        <p>¡Gracias! Tu consulta fue enviada. Te respondemos a la brevedad.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="modal-overlay" id="modal" onclick="closeModal(event)">
+    <div class="modal-box">
+        <button class="modal-close" onclick="closeModal()">✕</button>
+        <div id="modal-inner"></div>
+    </div>
+</div>
+
+<footer>
+    <div class="container">
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <h3>⚙ BF Productos y Servicios</h3>
+                <p>Taller metalúrgico especializado en fabricación y reparación de carrocerías, estructuras metálicas y equipamiento para línea pesada, 4×4 y minería. Más de 60 años de trayectoria en Mendoza.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Navegación</h4>
+                <ul>
+                    <li><a href="index.html">Inicio</a></li>
+                    <li><a href="bf-productos.html">Galería de trabajos</a></li>
+                    <li><a href="#novedades">Novedades</a></li>
+                    <li><a href="#contacto">Contacto</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Contacto</h4>
+                <ul>
+                    <li><a href="https://wa.me/5492615528091" target="_blank" rel="noopener">WhatsApp</a></li>
+                    <li><a href="mailto:bfproductosyservicios@gmail.com">Email</a></li>
+                    <li><a href="https://share.google/cF3YX1ZZ8mhxVCasz" target="_blank" rel="noopener">Google Maps</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 BF Productos y Servicios — Todos los derechos reservados.</p>
+            <p>Taller Metalúrgico · Mendoza, Argentina</p>
+        </div>
+    </div>
+    <span class="secret-trigger" onclick="secretClick()">·</span>
+</footer>
+
+<a href="https://wa.me/5492615528091" class="whatsapp-float" target="_blank" rel="noopener" title="Contactar por WhatsApp">
+    <span style="font-size:1.9rem">💬</span>
+</a>
+<button class="back-top" id="back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Volver arriba">↑</button>
+<div class="toast" id="toast"></div>
+
+<script>
+// ── NOVEDADES desde GitHub ──
+async function loadNovedades() {
+    try {
+        const url = 'https://raw.githubusercontent.com/francobocchi22-spec/BFPRODYSERV/main/novedades.json?_=' + Date.now();
+        const res = await fetch(url);
+        if (!res.ok) return [];
+        return await res.json();
+    } catch(e) { return []; }
+}
+
+function formatDate(iso) {
+    return new Date(iso).toLocaleDateString('es-AR', {day:'2-digit',month:'long',year:'numeric'});
+}
+
+function renderNovedades(list) {
+    const grid = document.getElementById('novedades-grid');
+    if (!list || !list.length) {
+        grid.innerHTML = '<div class="no-novedades"><span>📰</span>Próximamente publicaremos novedades del taller.</div>';
+        return;
+    }
+    grid.innerHTML = '';
+    [...list].sort((a,b) => b.date.localeCompare(a.date)).forEach(n => {
+        const div = document.createElement('div');
+        div.className = 'novedad-card';
+        div.onclick = () => openModal(n);
+        div.innerHTML =
+            (n.img ? '<img class="novedad-img" src="'+n.img+'" alt="'+esc(n.title)+'">'
+                   : '<div class="novedad-img-placeholder">📰</div>') +
+            '<div class="novedad-body">' +
+                '<div class="novedad-date">'+formatDate(n.date)+'</div>' +
+                '<div class="novedad-title">'+esc(n.title)+'</div>' +
+                '<div class="novedad-text">'+esc(n.text)+'</div>' +
+                '<div class="novedad-readmore">Leer más →</div>' +
+            '</div>';
+        grid.appendChild(div);
+    });
+}
+
+function openModal(n) {
+    document.getElementById('modal-inner').innerHTML =
+        (n.img ? '<img src="'+n.img+'" alt="'+esc(n.title)+'">' : '') +
+        '<div class="modal-content">' +
+            '<div class="modal-date">'+formatDate(n.date)+'</div>' +
+            '<div class="modal-title">'+esc(n.title)+'</div>' +
+            '<div class="modal-text">'+esc(n.text)+'</div>' +
+        '</div>';
+    document.getElementById('modal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeModal(e) {
+    if (!e || e.target === document.getElementById('modal') || e.target.classList.contains('modal-close')) {
+        document.getElementById('modal').classList.remove('open');
+        document.body.style.overflow = '';
+    }
+}
+document.addEventListener('keydown', e => { if(e.key==='Escape') closeModal(); });
+
+function sendForm() {
+    const nombre   = document.getElementById('nombre').value.trim();
+    const telefono = document.getElementById('telefono').value.trim();
+    const email    = document.getElementById('email').value.trim();
+    const asunto   = document.getElementById('asunto').value;
+    const mensaje  = document.getElementById('mensaje').value.trim();
+    if (!nombre)  { showToast('⚠️ Ingresá tu nombre'); return; }
+    if (!email)   { showToast('⚠️ Ingresá tu email'); return; }
+    if (!mensaje) { showToast('⚠️ Escribí tu mensaje'); return; }
+    const partes = ['Hola! Me comunico desde el sitio web.', 'Nombre: '+nombre];
+    if (telefono) partes.push('Teléfono: '+telefono);
+    partes.push('Email: '+email);
+    if (asunto) partes.push('Asunto: '+asunto);
+    partes.push('', mensaje);
+    window.open('https://wa.me/5492615528091?text='+encodeURIComponent(partes.join('\n')), '_blank');
+    document.getElementById('contact-form-inner').style.display = 'none';
+    document.getElementById('form-success').style.display = 'block';
+}
+
+window.addEventListener('scroll', () => {
+    document.getElementById('back-top').classList.toggle('visible', window.scrollY > 400);
+}, {passive:true});
+
+let _sc=0,_st;
+function secretClick() {
+    _sc++; clearTimeout(_st); _st=setTimeout(()=>_sc=0,800);
+    if(_sc>=3){_sc=0;window.location.href='bf-admin.html';}
+}
+
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+let _tt;
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');clearTimeout(_tt);_tt=setTimeout(()=>t.classList.remove('show'),3500);}
+
+// ── INIT ──
+(async () => {
+    const list = await loadNovedades();
+    renderNovedades(list);
+    const lo = document.getElementById('loading-overlay');
+    lo.style.opacity = '0';
+    setTimeout(() => lo.style.display = 'none', 400);
+})();
+</script>
+</body>
+</html>

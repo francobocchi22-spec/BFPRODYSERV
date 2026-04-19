@@ -12,7 +12,6 @@
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://francobocchi22-spec.github.io/BFPRODYSERV/">
 
-    <!-- Open Graph -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://francobocchi22-spec.github.io/BFPRODYSERV/">
     <meta property="og:title" content="BF Productos y Servicios | Taller Metalúrgico Mendoza">
@@ -21,7 +20,6 @@
     <meta property="og:locale" content="es_AR">
     <meta property="og:site_name" content="BF Productos y Servicios">
 
-    <!-- Schema LocalBusiness -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -65,9 +63,7 @@
         "contactType": "customer service",
         "availableLanguage": "Spanish"
       },
-      "sameAs": [
-        "https://wa.me/542615528091"
-      ]
+      "sameAs": ["https://wa.me/542615528091"]
     }
     </script>
 
@@ -185,7 +181,7 @@
         .form-success span { font-size:3rem; display:block; margin-bottom:.8rem; }
         .form-success p { color:var(--muted); font-size:.95rem; }
 
-        footer { background:#080808; border-top:2px solid var(--border); padding:3rem 0 1.5rem; position:relative; }
+        footer { background:#080808; border-top:2px solid var(--border); padding:3rem 0 1.5rem; }
         .footer-grid { display:grid; grid-template-columns:2fr 1fr 1fr; gap:3rem; margin-bottom:2.5rem; }
         .footer-brand h3 { font-family:'Oswald',sans-serif; color:var(--orange); font-size:1.2rem; text-transform:uppercase; letter-spacing:2px; margin-bottom:.6rem; }
         .footer-brand p { color:var(--muted); font-size:.86rem; line-height:1.75; max-width:340px; }
@@ -194,9 +190,10 @@
         .footer-col ul li { margin-bottom:.5rem; }
         .footer-col ul li a { color:var(--muted); font-size:.86rem; transition:color .2s; }
         .footer-col ul li a:hover { color:var(--orange); text-decoration:none; }
-        .footer-bottom { border-top:1px solid var(--border); padding-top:1.2rem; display:flex; justify-content:space-between; flex-wrap:wrap; gap:.5rem; }
+        .footer-bottom { border-top:1px solid var(--border); padding-top:1.2rem; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:.5rem; }
         .footer-bottom p { color:#444; font-size:.78rem; }
-        .secret-trigger { cursor:default; user-select:none; color:transparent; font-size:1px; position:absolute; bottom:.8rem; right:1.5rem; padding:1.2rem; }
+        .admin-link { font-size:.75rem; color:#444; font-family:'Oswald',sans-serif; text-transform:uppercase; letter-spacing:1px; padding:.35rem .8rem; border:1px solid #2a2a2a; border-radius:4px; transition:all .3s; }
+        .admin-link:hover { color:var(--orange); border-color:var(--orange); text-decoration:none; }
 
         .whatsapp-float { position:fixed; bottom:2rem; right:2rem; background:var(--green); border-radius:50%; width:3.6rem; height:3.6rem; display:flex; align-items:center; justify-content:center; box-shadow:0 4px 20px rgba(37,211,102,.4); transition:transform .3s; z-index:500; }
         .whatsapp-float:hover { transform:scale(1.12); text-decoration:none; }
@@ -391,9 +388,9 @@
         <div class="footer-bottom">
             <p>&copy; 2026 BF Productos y Servicios — Todos los derechos reservados.</p>
             <p>Taller Metalúrgico · Mendoza, Argentina</p>
+            <a href="bf-admin.html" class="admin-link">⚙ Admin</a>
         </div>
     </div>
-    <span class="secret-trigger" onclick="secretClick()">·</span>
 </footer>
 
 <a href="https://wa.me/542615528091" class="whatsapp-float" target="_blank" rel="noopener" title="Contactar por WhatsApp"><span style="font-size:1.9rem">💬</span></a>
@@ -480,12 +477,6 @@ function sendForm() {
 window.addEventListener('scroll', () => {
     document.getElementById('back-top').classList.toggle('visible', window.scrollY > 400);
 }, {passive:true});
-
-let _sc=0,_st;
-function secretClick() {
-    _sc++; clearTimeout(_st); _st=setTimeout(()=>_sc=0,800);
-    if(_sc>=3){_sc=0;window.location.href='bf-admin.html';}
-}
 
 function esc(s) { return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
 let _tt;

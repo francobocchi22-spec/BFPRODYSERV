@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://francobocchi22-spec.github.io/BFPRODYSERV/sitemap.xml

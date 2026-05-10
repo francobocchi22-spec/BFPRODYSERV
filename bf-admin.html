@@ -118,6 +118,16 @@
         .spinner-sm{width:28px;height:28px;border:3px solid #333;border-top-color:var(--orange);border-radius:50%;animation:spin .7s linear infinite;}
         @keyframes spin{to{transform:rotate(360deg)}}
 
+        /* MODAL EDICIÓN */
+        .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:5000;display:flex;align-items:center;justify-content:center;padding:1rem;opacity:0;pointer-events:none;transition:opacity .25s}
+        .modal-overlay.open{opacity:1;pointer-events:all}
+        .modal-box{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:2rem;width:100%;max-width:620px;max-height:90vh;overflow-y:auto;transform:translateY(16px);transition:transform .25s;box-shadow:0 24px 60px rgba(0,0,0,.7)}
+        .modal-overlay.open .modal-box{transform:translateY(0)}
+        .modal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem}
+        .modal-header h3{font-family:'Oswald',sans-serif;color:var(--orange);font-size:1.1rem;text-transform:uppercase;letter-spacing:1px}
+        .modal-close{background:none;border:none;color:var(--muted);font-size:1.4rem;cursor:pointer;line-height:1;padding:.2rem .4rem;border-radius:4px;transition:color .2s}
+        .modal-close:hover{color:#fff}
+
         /* INFO BOX */
         .info-box{background:rgba(255,102,0,.07);border:1px solid rgba(255,102,0,.2);border-radius:6px;padding:1rem 1.2rem;font-size:.88rem;color:var(--muted);margin-bottom:1.5rem;display:flex;gap:.8rem;align-items:flex-start;}
         .info-box span{font-size:1.2rem;flex-shrink:0;}
@@ -327,6 +337,60 @@
             </div>
         </div>
 
+    </div>
+</div>
+
+<!-- MODAL EDITAR NOVEDAD -->
+<div class="modal-overlay" id="edit-modal" onclick="closeEditModal(event)">
+    <div class="modal-box">
+        <div class="modal-header">
+            <h3>✏️ Editar novedad</h3>
+            <button class="modal-close" onclick="closeEditModal()">✕</button>
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label>Título *</label>
+                <input type="text" id="e-title" maxlength="100" oninput="updateChar(this,'e-title-count')">
+                <div class="char-count"><span id="e-title-count">0</span>/100</div>
+            </div>
+            <div class="form-group">
+                <label>Fecha *</label>
+                <input type="date" id="e-date">
+            </div>
+        </div>
+        <div class="form-row full">
+            <div class="form-group">
+                <label>Texto / descripción *</label>
+                <textarea id="e-text" maxlength="2000" oninput="updateChar(this,'e-text-count')"></textarea>
+                <div class="char-count"><span id="e-text-count">0</span>/2000</div>
+            </div>
+        </div>
+        <div class="form-row full">
+            <div class="form-group">
+                <label>Imagen</label>
+                <!-- imagen actual -->
+                <div id="e-current-img-wrap" style="display:none;margin-bottom:.8rem">
+                    <img id="e-current-img" src="" alt="" style="max-height:140px;border-radius:6px;border:1px solid var(--border)">
+                    <button class="btn-sm del" onclick="removeEditImg()" style="display:inline-block;margin-top:.4rem">✕ Quitar imagen actual</button>
+                </div>
+                <!-- nueva imagen -->
+                <label class="upload-area" id="e-upload-area">
+                    <input type="file" accept="image/*" id="e-img-input" onchange="handleEditImg(this)">
+                    <div class="upload-area-text" id="e-upload-text">
+                        <span>📷</span>
+                        Hacé clic para reemplazar la imagen
+                    </div>
+                    <div class="img-preview-wrap" id="e-preview-wrap">
+                        <img id="e-img-preview" src="" alt="">
+                        <span class="remove-img" onclick="clearEditNewImg(event)">✕ Quitar nueva imagen</span>
+                    </div>
+                </label>
+            </div>
+        </div>
+        <div style="display:flex;gap:.8rem;margin-top:1rem;flex-wrap:wrap">
+            <button class="btn btn-orange" onclick="saveEdit()" id="e-save-btn">💾 Guardar cambios</button>
+            <button class="btn btn-ghost" onclick="closeEditModal()">Cancelar</button>
+        </div>
     </div>
 </div>
 
@@ -541,6 +605,7 @@ function renderNovedasList() {
                 '<div class="novedad-row-date">'+formatDate(n.date)+'</div>' +
             '</div>' +
             '<div style="display:flex;gap:.5rem;flex-shrink:0">' +
+                '<button class="btn-sm" onclick="openEditModal(\''+n.id+'\')">✏️ Editar</button>' +
                 '<button class="btn-sm del" onclick="deleteNovedad(\''+n.id+'\')">🗑️ Borrar</button>' +
             '</div>';
         el.appendChild(row);
@@ -553,6 +618,122 @@ async function deleteNovedad(id) {
     await saveNovedadesIndex();
     renderNovedasList();
     showToast('🗑️ Novedad eliminada');
+}
+
+// ══════════════════════════════════════════
+//  EDICIÓN DE NOVEDADES
+// ══════════════════════════════════════════
+let editingId      = null;   // id de la novedad en edición
+let eImgFile       = null;   // nueva imagen seleccionada (File)
+let eKeepCurrentImg = true;  // si mantener la imagen ya subida
+
+function openEditModal(id) {
+    const n = novedades.find(x => x.id === id);
+    if (!n) return;
+    editingId = id;
+    eImgFile  = null;
+    eKeepCurrentImg = true;
+
+    document.getElementById('e-title').value = n.title;
+    document.getElementById('e-date').value  = n.date;
+    document.getElementById('e-text').value  = n.text;
+    updateChar(document.getElementById('e-title'), 'e-title-count');
+    updateChar(document.getElementById('e-text'),  'e-text-count');
+
+    // imagen actual
+    const curWrap = document.getElementById('e-current-img-wrap');
+    const curImg  = document.getElementById('e-current-img');
+    if (n.img) {
+        curImg.src = n.img;
+        curWrap.style.display = 'block';
+    } else {
+        curWrap.style.display = 'none';
+    }
+
+    // limpiar selector de nueva imagen
+    document.getElementById('e-img-input').value = '';
+    document.getElementById('e-preview-wrap').style.display = 'none';
+    document.getElementById('e-upload-text').style.display  = '';
+    document.getElementById('e-img-preview').src = '';
+
+    document.getElementById('edit-modal').classList.add('open');
+}
+
+function closeEditModal(e) {
+    if (e && e.target !== document.getElementById('edit-modal')) return;
+    document.getElementById('edit-modal').classList.remove('open');
+    editingId = null; eImgFile = null;
+}
+
+function removeEditImg() {
+    eKeepCurrentImg = false;
+    document.getElementById('e-current-img-wrap').style.display = 'none';
+}
+
+function handleEditImg(input) {
+    const file = input.files[0];
+    if (!file) return;
+    eImgFile = file;
+    const reader = new FileReader();
+    reader.onload = ev => {
+        document.getElementById('e-upload-text').style.display = 'none';
+        document.getElementById('e-img-preview').src = ev.target.result;
+        document.getElementById('e-preview-wrap').style.display = 'block';
+    };
+    reader.readAsDataURL(file);
+}
+
+function clearEditNewImg(e) {
+    e.preventDefault();
+    eImgFile = null;
+    document.getElementById('e-img-input').value = '';
+    document.getElementById('e-preview-wrap').style.display = 'none';
+    document.getElementById('e-upload-text').style.display  = '';
+}
+
+async function saveEdit() {
+    const title = document.getElementById('e-title').value.trim();
+    const date  = document.getElementById('e-date').value;
+    const text  = document.getElementById('e-text').value.trim();
+    if (!title) { showToast('⚠️ El título es obligatorio'); return; }
+    if (!date)  { showToast('⚠️ La fecha es obligatoria');  return; }
+    if (!text)  { showToast('⚠️ El texto es obligatorio');  return; }
+
+    const btn = document.getElementById('e-save-btn');
+    btn.disabled = true;
+    btn.textContent = '⏳ Guardando...';
+
+    const idx = novedades.findIndex(x => x.id === editingId);
+    if (idx === -1) { showToast('⚠️ Novedad no encontrada'); btn.disabled = false; btn.textContent = '💾 Guardar cambios'; return; }
+
+    let imgUrl = novedades[idx].img;
+
+    // Si eligió nueva imagen → subirla
+    if (eImgFile) {
+        try {
+            showToast('☁️ Subiendo nueva imagen...');
+            imgUrl = await uploadToCloudinary(eImgFile, 'novedades');
+        } catch(err) {
+            showToast('⚠️ Error al subir la imagen');
+            btn.disabled = false; btn.textContent = '💾 Guardar cambios';
+            return;
+        }
+    } else if (!eKeepCurrentImg) {
+        // la quitó sin reemplazar
+        imgUrl = null;
+    }
+
+    novedades[idx] = { ...novedades[idx], title, date, text, img: imgUrl };
+    const ok = await saveNovedadesIndex();
+
+    btn.disabled = false;
+    btn.textContent = '💾 Guardar cambios';
+
+    if (ok !== false) {
+        document.getElementById('edit-modal').classList.remove('open');
+        renderNovedasList();
+        showToast('✅ Novedad actualizada correctamente');
+    }
 }
 
 // ══════════════════════════════════════════

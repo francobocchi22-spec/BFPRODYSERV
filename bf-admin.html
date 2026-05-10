@@ -162,6 +162,7 @@
     <div class="admin-tabs">
         <button class="admin-tab active" onclick="switchTab('novedades',this)">📰 Novedades</button>
         <button class="admin-tab" onclick="switchTab('galeria',this)">🖼️ Galería</button>
+        <button class="admin-tab" onclick="switchTab('imagenes',this)">🏭 Imágenes</button>
         <button class="admin-tab" onclick="switchTab('config',this)">⚙️ Configuración</button>
     </div>
 
@@ -229,6 +230,60 @@
                     <button class="cat-pill" onclick="selectCat('otros',this)">🔩 Otros</button>
                 </div>
                 <div class="photo-grid" id="admin-photo-grid"></div>
+            </div>
+        </div>
+
+        <!-- TAB IMÁGENES -->
+        <div class="tab-panel" id="tab-imagenes">
+
+            <!-- FOTO DEL TALLER -->
+            <div class="panel-card">
+                <h3>🏭 Foto del taller — sección "Quiénes Somos"</h3>
+                <div class="info-box">
+                    <span>ℹ️</span>
+                    <span>Esta foto aparece en la sección <strong>Historia</strong> de la página Quiénes Somos. Se guarda en Cloudinary y queda visible para todos.</span>
+                </div>
+                <div id="historia-current-wrap" style="margin-bottom:1.2rem;display:none">
+                    <p style="font-size:.82rem;color:var(--muted);margin-bottom:.5rem;text-transform:uppercase;letter-spacing:.5px">Foto actual:</p>
+                    <img id="historia-current-img" src="" alt="" style="max-height:180px;border-radius:6px;border:1px solid var(--border)">
+                    <button class="btn-sm del" onclick="removeSeccionImg('historia')" style="display:block;margin-top:.5rem">🗑️ Quitar foto</button>
+                </div>
+                <label class="upload-area" id="historia-upload-area" style="position:relative">
+                    <input type="file" accept="image/*" id="historia-img-input" onchange="uploadSeccionImg(this,'historia')">
+                    <div class="upload-area-text" id="historia-upload-text">
+                        <span>📷</span>
+                        Hacé clic para seleccionar la foto del taller
+                    </div>
+                    <div class="uploading-indicator" id="historia-uploading" style="display:none">
+                        <div class="spinner-sm"></div>
+                        <p>Subiendo imagen...</p>
+                    </div>
+                </label>
+            </div>
+
+            <!-- FOTO DEL EQUIPO -->
+            <div class="panel-card">
+                <h3>👨‍🔧 Foto del equipo — sección "Presente y Futuro"</h3>
+                <div class="info-box">
+                    <span>ℹ️</span>
+                    <span>Esta foto aparece en la sección <strong>Presente y Futuro</strong> de la página Quiénes Somos.</span>
+                </div>
+                <div id="equipo-current-wrap" style="margin-bottom:1.2rem;display:none">
+                    <p style="font-size:.82rem;color:var(--muted);margin-bottom:.5rem;text-transform:uppercase;letter-spacing:.5px">Foto actual:</p>
+                    <img id="equipo-current-img" src="" alt="" style="max-height:180px;border-radius:6px;border:1px solid var(--border)">
+                    <button class="btn-sm del" onclick="removeSeccionImg('equipo')" style="display:block;margin-top:.5rem">🗑️ Quitar foto</button>
+                </div>
+                <label class="upload-area" id="equipo-upload-area" style="position:relative">
+                    <input type="file" accept="image/*" id="equipo-img-input" onchange="uploadSeccionImg(this,'equipo')">
+                    <div class="upload-area-text" id="equipo-upload-text">
+                        <span>📷</span>
+                        Hacé clic para seleccionar la foto del equipo
+                    </div>
+                    <div class="uploading-indicator" id="equipo-uploading" style="display:none">
+                        <div class="spinner-sm"></div>
+                        <p>Subiendo imagen...</p>
+                    </div>
+                </label>
             </div>
         </div>
 
@@ -647,6 +702,65 @@ async function initAdmin() {
     renderNovedasList();
     renderPhotoGrid();
     document.getElementById('n-date').value = new Date().toISOString().slice(0,10);
+    loadSeccionImgPreviews();
+}
+
+// ══════════════════════════════════════════
+//  IMÁGENES DE SECCIONES (Quiénes Somos)
+// ══════════════════════════════════════════
+function loadSeccionImgPreviews() {
+    ['historia','equipo'].forEach(function(sec) {
+        var url = localStorage.getItem('bf-' + sec + '-img');
+        var wrap = document.getElementById(sec + '-current-wrap');
+        var img  = document.getElementById(sec + '-current-img');
+        var area = document.getElementById(sec + '-upload-area');
+        if (url && wrap && img) {
+            img.src = url;
+            wrap.style.display = 'block';
+            if (area) area.style.display = 'none';
+        }
+    });
+}
+
+async function uploadSeccionImg(input, sec) {
+    var file = input.files[0];
+    if (!file) return;
+    input.value = '';
+    var uploading = document.getElementById(sec + '-uploading');
+    var uploadText = document.getElementById(sec + '-upload-text');
+    uploading.style.display = 'flex';
+    uploadText.style.display = 'none';
+    try {
+        var url = await uploadToCloudinary(file, 'secciones');
+        localStorage.setItem('bf-' + sec + '-img', url);
+        var wrap = document.getElementById(sec + '-current-wrap');
+        var img  = document.getElementById(sec + '-current-img');
+        var area = document.getElementById(sec + '-upload-area');
+        img.src = url;
+        wrap.style.display = 'block';
+        if (area) area.style.display = 'none';
+        showToast('✅ Foto guardada correctamente');
+    } catch(e) {
+        showToast('⚠️ Error al subir la imagen');
+        uploading.style.display = 'none';
+        uploadText.style.display = '';
+    }
+}
+
+function removeSeccionImg(sec) {
+    if (!confirm('¿Quitar la foto de esta sección?')) return;
+    localStorage.removeItem('bf-' + sec + '-img');
+    var wrap = document.getElementById(sec + '-current-wrap');
+    var img  = document.getElementById(sec + '-current-img');
+    var area = document.getElementById(sec + '-upload-area');
+    var uploadText = document.getElementById(sec + '-upload-text');
+    var uploading  = document.getElementById(sec + '-uploading');
+    img.src = '';
+    wrap.style.display = 'none';
+    if (area) area.style.display = '';
+    if (uploading) uploading.style.display = 'none';
+    if (uploadText) uploadText.style.display = '';
+    showToast('🗑️ Foto quitada');
 }
 </script>
 </body>

@@ -77,6 +77,11 @@
             gap:.5rem; color:#333; font-size:3rem;
         }
         .historia-img-wrap .img-placeholder p { font-size:.75rem; color:#444; font-family:'Oswald',sans-serif; text-transform:uppercase; letter-spacing:2px; }
+        .historia-img-wrap .img-real {
+            width:100%; aspect-ratio:4/3; object-fit:cover;
+            border-radius:8px; border:1px solid var(--border);
+            display:block;
+        }
         .historia-img-wrap::before {
             content: '';
             position: absolute;
@@ -295,7 +300,7 @@
                 </div>
             </div>
             <div class="historia-img-wrap">
-                <div class="img-placeholder">
+                <div class="img-placeholder" id="historia-img-wrap">
                     🏭
                     <p>Foto del taller</p>
                 </div>
@@ -430,7 +435,7 @@
     <div class="container">
         <div class="historia-grid">
             <div class="historia-img-wrap">
-                <div class="img-placeholder">
+                <div class="img-placeholder" id="equipo-img-wrap">
                     👨‍🔧
                     <p>Foto del equipo</p>
                 </div>
@@ -540,3 +545,24 @@ window.addEventListener('scroll', () => {
 
 let _sc=0,_st;
 function sec
+
+</script>
+<script>
+// ── Cargar fotos de "Quiénes Somos" desde localStorage (subidas desde el Admin) ──
+(function() {
+    function loadSectionImg(storageKey, wrapperId) {
+        var url = localStorage.getItem(storageKey);
+        var wrap = document.getElementById(wrapperId);
+        if (!url || !wrap) return;
+        var img = document.createElement('img');
+        img.src = url;
+        img.className = 'img-real';
+        img.alt = '';
+        wrap.parentNode.replaceChild(img, wrap);
+    }
+    loadSectionImg('bf-historia-img', 'historia-img-wrap');
+    loadSectionImg('bf-equipo-img',   'equipo-img-wrap');
+})();
+</script>
+</body>
+</html>
